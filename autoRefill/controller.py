@@ -36,15 +36,8 @@ class Controller:
         if self.should_pump_be_active():
             logging.info("Running auto refill pump")
             try:
-                signal.signal(signal.SIGALRM, self.signal_handler)
-                signal.alarm(time_counter - 1)
-                try:
-                    GPIO.output(self.water_pump_refill_relay, GPIO.HIGH)
-                    FlowCounter().run(time_counter)
-                except:
-                    logging.error("Time out for refill pump!")
-                finally:
-                    GPIO.output(self.water_pump_refill_relay, GPIO.LOW)
+                GPIO.output(self.water_pump_refill_relay, GPIO.HIGH)
+                FlowCounter().run(time_counter)
             except:
                 logging.error("An error occurs during refill pump switching process")
             finally:
