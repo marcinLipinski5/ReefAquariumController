@@ -1,8 +1,9 @@
+
 from datetime import date
 from tinydb import TinyDB, Query
 import RPi.GPIO as GPIO
 import time, sys
-
+from functools import partial
 from pins.IOPins import IOPins
 
 
@@ -22,7 +23,7 @@ class FlowCounter:
     def run(self, time_of_refill: int):
         print(f"COUNTER IN: {self.pulse_counter}")
         if self.__should_daily_refill_counter_be_reset(): self.__reset_counter()
-        GPIO.add_event_detect(self.water_pump_refill_flow_counter, GPIO.RISING, callback=self.__count_pulse)
+        GPIO.add_event_detect(self.water_pump_refill_flow_counter, GPIO.RISING, callback=self.count_pulse)
         time.sleep(time_of_refill)
         GPIO.remove_event_detect(self.water_pump_refill_flow_counter)
         print(f"COUNTER OUT: {self.pulse_counter}")
@@ -33,7 +34,7 @@ class FlowCounter:
         result = self.pulse_counter * 2
         return result
 
-    def __count_pulse(self):
+    def count_pulse(self, _):
         self.pulse_counter += 1
 
     def __should_daily_refill_counter_be_reset(self):
@@ -49,5 +50,5 @@ class FlowCounter:
 
 if __name__ == "__main__":
     dupa = FlowCounter()
-    print(dupa.__should_daily_refill_counter_be_reset())
-    dupa.__run()
+    while True:
+        dupa.run(10)
