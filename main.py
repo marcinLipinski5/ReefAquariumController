@@ -1,6 +1,8 @@
 import logging
+import RPi.GPIO as GPIO
 
 
+# noinspection PyArgumentList
 class ReefAquariumController:
 
     def __init__(self):
@@ -12,3 +14,6 @@ class ReefAquariumController:
                 logging.StreamHandler()
             ]
         )
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)

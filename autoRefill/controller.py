@@ -1,12 +1,11 @@
+import logging
 import time
 import traceback
 
-from pins.IOPins import IOPins
-import logging
+import RPi.GPIO as GPIO
 from tinydb import TinyDB, Query
 
-
-# import RPi.GPIO as GPIO
+from pins.IOPins import IOPins
 
 
 class Controller:
@@ -26,17 +25,17 @@ class Controller:
         self.alarm = self.get_alarm()
 
     def run(self):
-        time_counter = 1  #  max time for pump to run in single iteration
+        time_counter = 5  #  max time for pump to run in single iteration
         self.check_alarm_conditions()
         if self.should_pump_be_active():
-            # GPIO.output(self.water_pump_refill_relay, GPIO.HIGH)
+            GPIO.output(self.water_pump_refill_relay, GPIO.HIGH)
             time.sleep(time_counter)
-            # GPIO.output(self.water_pump_refill_relay, GPIO.LOW)
+            GPIO.output(self.water_pump_refill_relay, GPIO.LOW)
 
     @staticmethod
     def check_level_sensor_state(sensor_pin: int) -> bool:  # TODO adjust to NC/NO sensor structure
-        # return True if GPIO.input(sensor_pin) == 1 else False
-        return False
+        return True if GPIO.input(sensor_pin) == 1 else False
+        # return False
 
     def check_alarm_conditions(self) -> None:
         alarm_state = True
