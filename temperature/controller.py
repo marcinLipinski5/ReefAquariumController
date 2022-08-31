@@ -17,7 +17,7 @@ class Controller:
         self.__save_temperature_to_db(temperature)
 
     def __save_temperature_to_db(self, temperature: float):
-        if abs(self.last_read - temperature) >= 0.0:
+        if abs(self.last_read - temperature) >= 0.2:
             logging.debug(f"Current temperature: {temperature}")
             self.database.update({'value': temperature}, Query().type == 'temperature')
-            self.database_archive.insert({'date': date.today().strftime("%d-%m-%Y"), 'value': temperature})
+            self.database_archive.insert({'date': date.today().strftime("%d-%m-%Y-%H:%M:%S"), 'value': temperature})
