@@ -7,17 +7,13 @@ from tinydb import TinyDB, Query
 
 from autoRefill.flow_counter import FlowCounter
 from pins.IOPins import IOPins
-import signal
+
 
 class Controller:
 
-    def __init__(self, database=TinyDB('db.json')):
-        self.database = database.table("auto_refill")
-        self.database.insert({'type': 'alarm', 'status': False})
-        self.database.insert({'type': 'daily_refill_flow', 'flow': 0})
-        self.database.insert({'type': 'max_daily_refill_flow', 'flow': 1000})
+    def __init__(self):
+        self.database = TinyDB('database/db.json').table("auto_refill")
 
-        GPIO.setmode(GPIO.BCM)
         self.water_level_sensor_down_value_main = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_MAIN.value
         self.water_level_sensor_down_value_backup = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_BACKUP.value
         self.water_level_sensor_up_value = IOPins.WATER_LEVEL_SENSOR_UP_VALUE.value
@@ -28,20 +24,23 @@ class Controller:
         GPIO.setup(self.water_level_sensor_up_value, GPIO.IN)
         GPIO.setup(self.water_pump_refill_relay, GPIO.OUT, initial=GPIO.LOW)
 
+        self.max_refill_time = self.database.get(Query().type == 'refill_max_time')['time']
         self.alarm = self.get_alarm()
 
     def run(self):
-        time_counter = 10  #  max time for pump to run in single iteration
         self.check_alarm_conditions()
         if self.should_pump_be_active():
             logging.info("Running auto refill pump")
             try:
+                self.database.update({'time': time.time()}, Query().type == 'refill_time_start')
                 GPIO.output(self.water_pump_refill_relay, GPIO.HIGH)
-                FlowCounter().run(time_counter)
+                FlowCounter().run(self.max_refill_time)
             except:
                 logging.error("An error occurs during refill pump switching process")
+                raise
             finally:
                 GPIO.output(self.water_pump_refill_relay, GPIO.LOW)
+                self.database.update({'time': 0}, Query().type == 'refill_time_start')
 
     @staticmethod
     def check_level_sensor_state(sensor_pin: int) -> bool:  # TODO adjust to NC/NO sensor structure
@@ -56,6 +55,7 @@ class Controller:
             alarm_state = True if (up_value_sensor or self.is_daily_water_flow_reached()) else False
         except:
             logging.warning(f"Unable to collect info about auto refill state. {traceback.print_exc()}")
+            raise
         self.set_alarm(alarm_state)
 
     def should_pump_be_active(self) -> bool:
@@ -84,9 +84,8 @@ class Controller:
     def get_alarm(self) -> bool:
         return self.database.get(Query().type == 'alarm')['status']
 
-    @staticmethod
-    def signal_handler(signum, frame):
-        raise Exception("Timed out!")
+    def update_refill_max_time_in_seconds(self):
+        self.max_working_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
 
 
 if __name__ == "__main__":
