@@ -12,7 +12,7 @@ from pins.IOPins import IOPins
 class Controller:
 
     def __init__(self):
-        self.database = TinyDB('database/db.json').table("auto_refill")
+        self.database = TinyDB('./database/db.json').table("auto_refill")
 
         self.water_level_sensor_down_value_main = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_MAIN.value
         self.water_level_sensor_down_value_backup = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_BACKUP.value
@@ -24,10 +24,11 @@ class Controller:
         GPIO.setup(self.water_level_sensor_up_value, GPIO.IN)
         GPIO.setup(self.water_pump_refill_relay, GPIO.OUT, initial=GPIO.LOW)
 
-        self.max_refill_time = self.database.get(Query().type == 'refill_max_time')['time']
+        self.max_refill_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
         self.alarm = self.get_alarm()
 
     def run(self):
+        logging.debug("Start main method for AUTO REFILL")
         self.check_alarm_conditions()
         if self.should_pump_be_active():
             logging.info("Running auto refill pump")
@@ -40,12 +41,13 @@ class Controller:
                 raise
             finally:
                 GPIO.output(self.water_pump_refill_relay, GPIO.LOW)
-                self.database.update({'time': 0}, Query().type == 'refill_time_start')
+                self.database.update({'time': 0.0}, Query().type == 'refill_time_start')
+                logging.info("Auto refill pump successfuly stopped")
 
     @staticmethod
     def check_level_sensor_state(sensor_pin: int) -> bool:  # TODO adjust to NC/NO sensor structure
         state = True if GPIO.input(sensor_pin) == 1 else False
-        print(f"Sensor state on pin: {sensor_pin} -> {state}")
+        logging.debug(f"Sensor state on pin: {sensor_pin} -> {state}")
         return state
 
     def check_alarm_conditions(self) -> None:

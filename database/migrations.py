@@ -1,3 +1,4 @@
+
 from tinydb import TinyDB, Query
 import logging
 
@@ -28,6 +29,6 @@ class Migrations:
             auto_refill_table.insert({'type': 'daily_refill_flow', 'flow': 0})
             auto_refill_table.insert({'type': 'max_daily_refill_flow', 'flow': 1000})
             auto_refill_table.insert({'type': 'flow_count_date', 'date': ''})
-            auto_refill_table.insert({'type': 'refill_time_start', 'time': ''})
+            auto_refill_table.insert({'type': 'refill_time_start', 'time': 0.0})
             auto_refill_table.insert({'type': 'refill_max_time_in_seconds', 'time': 10})
             logging.info("Migration for v1 DONE")

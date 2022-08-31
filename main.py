@@ -14,7 +14,7 @@ class ReefAquariumController:
 
     def __init__(self):
         logging.basicConfig(
-            level=logging.INFO,
+            level=logging.DEBUG,
             format="%(asctime)s [%(levelname)s] %(message)s",
             handlers=[
                 logging.FileHandler("aquarium_log.log"),
@@ -56,6 +56,7 @@ class ReefAquariumController:
         self.auto_refill.run()
 
     def run_watchdog(self):
+        logging.info("Starting watchdog thread")
         try:
             while True:
                 self.watchdog.run()

@@ -22,8 +22,11 @@ class AutoRefillWatchdog:
 
     def __is_work_time_exceeded(self) -> bool:
         start_time = self.database.get(Query().type == 'refill_time_start')['time']
-        now = time.time()
-        return int(now-start_time) > (self.max_refill_time + 3)  # plus 3 seconds as protection against random delays
+        if int(start_time) == 0:
+            return False
+        else:
+            now = time.time()
+            return int(now-float(start_time)) > (int(self.max_refill_time) + 3)  # plus 3 seconds as protection against random delays
 
     def __reset_pump_relay(self):
         GPIO.output(self.water_pump_refill_relay, GPIO.LOW)
