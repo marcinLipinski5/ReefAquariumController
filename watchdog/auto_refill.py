@@ -13,7 +13,6 @@ class AutoRefillWatchdog:
         self.database = TinyDB('database/db.json').table("auto_refill")
         self.water_pump_refill_relay = IOPins.WATER_PUMP_REFILL_RELAY.value
         self.max_refill_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
-        GPIO.setup(self.water_pump_refill_relay, GPIO.OUT)
 
     def run(self):
         if self.__is_work_time_exceeded():
