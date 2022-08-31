@@ -31,4 +31,7 @@ class Migrations:
             auto_refill_table.insert({'type': 'flow_count_date', 'date': ''})
             auto_refill_table.insert({'type': 'refill_time_start', 'time': 0.0})
             auto_refill_table.insert({'type': 'refill_max_time_in_seconds', 'time': 10})
+
+            temperature_table = self.database.table('temperature')
+            temperature_table.insert({'type': 'temperature', 'value': 0.0})
             logging.info("Migration for v1 DONE")

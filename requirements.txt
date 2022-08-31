@@ -1,3 +1,4 @@
 RPi.GPIO
 tinydb
 flask
+w1thermsensor
