@@ -1,19 +1,13 @@
-import flask
-from flask import Flask, url_for, request
-
+from flask import Flask, url_for, request, render_template
+from api.feeding.api import feeding_api
 
 app = Flask(__name__)
+app.register_blueprint(feeding_api, url_prefix='/feeding')
 
 
 @app.route('/', methods=["GET"])
 def hello():
-    return flask.render_template("index.html")
-
-@app.route('/dupa', methods=["POST"])
-def dupa():
-    aaa = request.form["refill_pump_max_working_time"]
-    print(aaa)
-    return aaa
+    return render_template("index.html")
 
 
 if __name__ == "__main__":

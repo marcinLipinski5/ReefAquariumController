@@ -10,6 +10,7 @@ class IOPins(Enum):
     WATER_PUMP_REFILL_FLOW_COUNTER = 26
     TEMPERATURE_SENSOR = 4
     FAN_PWM = 12
+    WATER_PUMP_RELAY = 2137
     # 7
     # 8
     # 9

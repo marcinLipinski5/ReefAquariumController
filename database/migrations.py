@@ -34,4 +34,13 @@ class Migrations:
 
             temperature_table = self.database.table('temperature')
             temperature_table.insert({'type': 'temperature', 'value': 0.0})
+
+            pump_table = self.database.table('feeding')
+            pump_table.insert({'type': 'is_feeding_time', 'status': False})
+            pump_table.insert({'type': 'start_time', 'timestamp': 0})
+            pump_table.insert({'type': 'feeding_duration', 'seconds': 600})
             logging.info("Migration for v1 DONE")
+
+
+if __name__ == "__main__":
+    Migrations()
