@@ -6,7 +6,8 @@ import logging
 class Migrations:
 
     def __init__(self):
-        self.database = TinyDB('database/db.json')
+        # self.database = TinyDB('database/db.json', indent=4)
+        self.database = TinyDB('C:\\Users\\Dell\\PycharmProjects\\reefAquariumController\\database\\db.json', indent=4)
         self.make()
 
     def make(self):

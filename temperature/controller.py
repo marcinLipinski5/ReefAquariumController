@@ -8,8 +8,8 @@ class Controller:
 
     def __init__(self):
         self.sensor = w1thermsensor.W1ThermSensor()
-        self.database = TinyDB('database/db.json').table('temperature')
-        self.database_archive = TinyDB('database/temperature.json').table('temperature')
+        self.database = TinyDB('database/db.json', indent=4).table('temperature')
+        self.database_archive = TinyDB('database/temperature.json', indent=4).table('temperature')
         self.last_read = 0.0
 
     def run(self):

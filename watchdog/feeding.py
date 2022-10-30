@@ -10,13 +10,13 @@ from pins.IOPins import IOPins
 class FeedingWatchdog:
 
     def __init__(self):
-        self.database = TinyDB('database/db.json').table("feeding")
+        self.database = TinyDB('database/db.json', indent=4).table("feeding")
         self.water_pump_relay = IOPins.WATER_PUMP_RELAY.value
 
     def run(self):
         if self.__is_work_time_exceeded():
-            self.__reset_pump_relay()
             logging.warning("WATCHDOG: Auto feeding time exceeded! Resetting pump relay to close state.")
+            self.__reset_pump_relay()
 
     def __is_work_time_exceeded(self) -> bool:
         start_time = self.database.get(Query().type == 'start_time')['timestamp']

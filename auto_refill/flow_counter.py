@@ -11,7 +11,7 @@ from pins.IOPins import IOPins
 class FlowCounter:
 
     def __init__(self):
-        self.database = TinyDB('database/db.json').table("auto_refill")
+        self.database = TinyDB('database/db.json', indent=4).table("auto_refill")
 
         self.pulse_counter = 0
 
@@ -45,7 +45,7 @@ class FlowCounter:
         self.database.update({'date': self.__get_current_date()}, Query().type == 'flow_count_date')
 
     def __save_daily_flow(self):
-        database = TinyDB('database/daily_flow.json').table("daily_flow")
+        database = TinyDB('database/daily_flow.json', indent=4).table("daily_flow")
         date = self.database.get(Query().type == 'flow_count_date')['date']
         flow = self.database.get(Query().type == 'daily_refill_flow')['flow']
         database.insert({'date': date, 'flow': flow})

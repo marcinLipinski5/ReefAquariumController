@@ -12,7 +12,7 @@ from pins.IOPins import IOPins
 class Controller:
 
     def __init__(self):
-        self.database = TinyDB('./database/db.json').table("auto_refill")
+        self.database = TinyDB('./database/db.json', indent=4).table("auto_refill")
 
         self.water_level_sensor_down_value_main = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_MAIN
         self.water_level_sensor_down_value_backup = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_BACKUP
@@ -26,7 +26,7 @@ class Controller:
         GPIO.setup(self.water_pump_refill_relay.value, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.limit_switch.value, GPIO.IN)
 
-        self.max_refill_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
+        self.max_refill_time = self.get_refill_max_time_in_seconds()
         self.alarm = self.get_alarm()
 
     def run(self):
@@ -102,8 +102,8 @@ class Controller:
     def get_alarm(self) -> bool:
         return self.database.get(Query().type == 'alarm')['status']
 
-    def update_refill_max_time_in_seconds(self):
-        self.max_refill_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
+    def get_refill_max_time_in_seconds(self):
+        return self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
 
 
 if __name__ == "__main__":

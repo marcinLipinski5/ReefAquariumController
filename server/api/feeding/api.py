@@ -3,13 +3,13 @@ from tinydb import TinyDB, Query
 from time import time
 import logging
 
-feeding_api = Blueprint('pump_api', __name__)
-database = TinyDB('C:\\Users\\Dell\\PycharmProjects\\reefAquariumController\\database\\db.json').table("feeding")
+feeding_api = Blueprint('feeding_api', __name__)
+database = TinyDB('C:\\Users\\Dell\\PycharmProjects\\reefAquariumController\\database\\db.json', indent=4).table("feeding")
 
 
 @feeding_api.route("/start", methods=["POST"])
 def start():
-    logging.info("Feeding started. Stooping all pumps")
+    logging.info("Feeding started. Stopping all pumps.")
     database.update({'status': True}, Query().type == 'is_feeding_time')
     database.update({'timestamp': time()}, Query().type == 'time_started')
     return Response(status=200)

@@ -9,7 +9,7 @@ from pins.IOPins import IOPins
 class Controller:
 
     def __init__(self):
-        self.database = TinyDB('database/db.json').table("feeding")
+        self.database = TinyDB('database/db.json', indent=4).table("feeding")
         self.water_pump_relay = IOPins.WATER_PUMP_RELAY
 
     def run(self):

@@ -10,9 +10,9 @@ from pins.IOPins import IOPins
 class AutoRefillWatchdog:
 
     def __init__(self):
-        self.database = TinyDB('database/db.json').table("auto_refill")
+        self.database = TinyDB('database/db.json', indent=4).table("auto_refill")
         self.water_pump_refill_relay = IOPins.WATER_PUMP_REFILL_RELAY.value
-        self.max_refill_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
+        self.max_refill_time = self.max_refill_max_time_in_seconds()
 
     def run(self):
         if self.__is_work_time_exceeded():
@@ -32,5 +32,5 @@ class AutoRefillWatchdog:
         self.database.update({'time': 0}, Query().type == 'refill_time_start')
         self.database.update({'state': False}, Query().type == 'water_pump_refill_relay_state')
 
-    def update_refill_max_time_in_seconds(self):
-        self.max_refill_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
+    def max_refill_max_time_in_seconds(self):
+        return self.database.get(Query().type == 'refill_max_time_in_seconds')['time']
