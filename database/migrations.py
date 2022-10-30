@@ -31,6 +31,11 @@ class Migrations:
             auto_refill_table.insert({'type': 'flow_count_date', 'date': ''})
             auto_refill_table.insert({'type': 'refill_time_start', 'time': 0.0})
             auto_refill_table.insert({'type': 'refill_max_time_in_seconds', 'time': 10})
+            auto_refill_table.insert({'type': 'water_pump_refill_relay_state', 'state': False})
+            auto_refill_table.insert({'type': 'limit_switch_state', 'state': False})
+            auto_refill_table.insert({'type': 'water_level_sensor_down_value_main', 'state': False})
+            auto_refill_table.insert({'type': 'water_level_sensor_down_value_backup', 'state': False})
+            auto_refill_table.insert({'type': 'water_level_sensor_up_value', 'state': False})
 
             temperature_table = self.database.table('temperature')
             temperature_table.insert({'type': 'temperature', 'value': 0.0})
@@ -39,6 +44,7 @@ class Migrations:
             pump_table.insert({'type': 'is_feeding_time', 'status': False})
             pump_table.insert({'type': 'start_time', 'timestamp': 0})
             pump_table.insert({'type': 'feeding_duration', 'seconds': 600})
+            pump_table.insert({'type': 'water_pump_state', 'state': False})
             logging.info("Migration for v1 DONE")
 
 

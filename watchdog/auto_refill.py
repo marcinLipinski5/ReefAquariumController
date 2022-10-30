@@ -30,6 +30,7 @@ class AutoRefillWatchdog:
     def __reset_pump_relay(self):
         GPIO.output(self.water_pump_refill_relay, GPIO.LOW)
         self.database.update({'time': 0}, Query().type == 'refill_time_start')
+        self.database.update({'state': False}, Query().type == 'water_pump_refill_relay_state')
 
     def update_refill_max_time_in_seconds(self):
         self.max_refill_time = self.database.get(Query().type == 'refill_max_time_in_seconds')['time']

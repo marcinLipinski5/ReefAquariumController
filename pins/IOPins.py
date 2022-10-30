@@ -11,6 +11,7 @@ class IOPins(Enum):
     TEMPERATURE_SENSOR = 4
     FAN_PWM = 12
     WATER_PUMP_RELAY = 2137
+    LIMIT_SWITCH = 2138
     # 7
     # 8
     # 9
