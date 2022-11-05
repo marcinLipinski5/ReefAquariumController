@@ -9,25 +9,23 @@ database = TinyDB('C:\\Users\\Dell\\PycharmProjects\\reefAquariumController\\dat
 
 @feeding_api.route("/start", methods=["POST"])
 def start():
-    logging.info("Feeding started. Stopping all pumps.")
-    database.update({'status': True}, Query().type == 'is_feeding_time')
-    database.update({'timestamp': time()}, Query().type == 'time_started')
+    command = request.get_json(force=True)['activate']
+    is_feeding_time = False
+    start_time = 0.0
+    if command:
+        is_feeding_time = True
+        start_time = time()
+        logging.info("Feeding started. Stopping all pumps.")
+    else:
+        logging.info("Feeding stopped. Starting all pumps.")
+    database.update({'status': is_feeding_time}, Query().type == 'is_feeding_time')
+    database.update({'timestamp': start_time}, Query().type == 'start_time')
     return Response(status=200)
 
 
-@feeding_api.route("/status", methods=["GET"])
-def status():
-    data = {}
-    is_feeding_time = database.get(Query().type == 'is_feeding_time')['status']
-    data["is_feeding_time"] = is_feeding_time
-    time_started = database.get(Query().type == 'start_time')['timestamp']
-    if time_started != 0:
-        calculated_time = round(database.get(Query().type == 'feeding_duration')['seconds'] - (time() - time_started))
-        data['remaining_time'] = calculated_time
-        if calculated_time < 0:
-            logging.warning("Feeding system error!")
-    else:
-        data['remaining_time'] = database.get(Query().type == 'feeding_duration')['seconds']
+@feeding_api.route("/feeding-duration", methods=["GET"])
+def feeding_duration():
+    data = {'feeding_duration': database.get(Query().type == 'feeding_duration')['seconds']}
     return jsonify(data), 200
 
 

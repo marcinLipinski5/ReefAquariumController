@@ -40,6 +40,8 @@ class Migrations:
 
             temperature_table = self.database.table('temperature')
             temperature_table.insert({'type': 'temperature', 'value': 0.0})
+            temperature_table.insert({'type': 'alarm_level', 'value': 26.0})
+            temperature_table.insert({'type': 'alarm', 'state': False})
 
             pump_table = self.database.table('feeding')
             pump_table.insert({'type': 'is_feeding_time', 'status': False})

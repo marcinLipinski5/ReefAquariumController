@@ -5,25 +5,13 @@
         <link rel="stylesheet" href="css/main.css">
     </head>
    <body>
-   <div class="timer">
-<!--       <span class="timer__part timer__part&#45;&#45;minutes">00</span>-->
-<!--       <span class="timer__part">:</span>-->
-<!--       <span class="timer__part timer__part&#45;&#45;seconds">00</span>-->
-<!--       <button type="button" class="timer__btn timer__btn&#45;&#45;control timer__btn&#45;&#45;start">-->
-<!--           <span class="material-icons">play_arrow</span>-->
-<!--       </button>-->
-<!--       <button type="button" class="timer__btn timer__btn&#45;&#45;reset">-->
-<!--           <span class="material-icons">timer</span>-->
-<!--       </button>-->
-   </div>
-   <script src="js/main.js" type="module"></script>
-<!--    <button id="feeding_button">Start feeding countdown</button>-->
-<!--    <button id="myButton" style="display:none"><a href="example.com">Button Text</a></button>-->
-<!--    <script>document.getElementById("myButton").style.display = "inline";</script>-->
-<!--      <form action = "{{ url_for('dupa') }}" method = "post">-->
-<!--          <p>Refill pump max working time:</p>-->
-<!--          <p><input type = "text" name = "refill_pump_max_working_time" /></p>-->
-<!--          <p><input type = "submit" value = "submit" /></p>-->
-<!--      </form>-->
+    <div class="flex-container">
+        <div class="feeding general__block"></div>
+        <script src="js/feeding.js" type="module"></script>
+        <div class="auto-refill general__block"></div>
+        <script src="js/auto-refill.js" type="module"></script>
+        <div class="temperature general__block"></div>
+        <script src="js/temperature.js" type="module"></script>
+    </div>
    </body>
 </html>

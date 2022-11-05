@@ -3,23 +3,75 @@ body {
   margin: 24px;
 }
 
-.timer {
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  min-height: 500px;
+  flex: 50%;
+  
+}
+
+.general__block {
   font-family: sans-serif;
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
   padding: 24px 32px;
   border-radius: 30px;
   background: white;
+  min-height: 100px;
+  margin-bottom: 10px;
+  flex: 100%;
+  
 }
 
-.timer__part {
-  font-size: 36px;
+.control__text__block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 25%;
+}
+
+.label__text__block {
+  display: flex;
+  width: 100px;
+  margin-left: 0px;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: underline;
+  flex: 15%;
+}
+
+.general__button__block {
+  width: 30%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex: 30%;
+  
+}
+
+.general__text {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 60px;
   font-weight: bold;
 }
 
-.timer__btn {
-  width: 50px;
-  height: 50px;
-  margin-left: 16px;
+.general__text__small {
+  margin-top: 30px;
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.material-icons {
+  font-size: 10vw;
+}
+
+.general__btn {
+  aspect-ratio : 1 / 1;
+  width: 70%;
   border-radius: 50%;
   border: none;
   color: white;
@@ -33,4 +85,23 @@ body {
 
 .timer__btn--stop {
   background: #ff0256;
+}
+
+.settings__btn {
+  background: #8708ef;
+  text-decoration: none;
+}
+
+.alarm__btn--inactive {
+  background: #00b84c;
+}
+
+.alarm__btn--active {
+  background: #ff0000;;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+    color: white;
 }

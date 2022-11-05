@@ -9,9 +9,7 @@ database = TinyDB('C:\\Users\\Dell\\PycharmProjects\\reefAquariumController\\dat
 @auto_refill_api.route("/status", methods=["GET"])
 def status():
     data = {'alarm': database.get(Query().type == 'alarm')['status'],
-            'daily_refill_flow': database.get(Query().type == 'daily_refill_flow')['flow'],
-            'max_daily_refill_flow': database.get(Query().type == 'max_daily_refill_flow')['flow'],
-            'refill_max_time_in_seconds': database.get(Query().type == 'refill_max_time_in_seconds')['time']}
+            'daily_refill_flow': database.get(Query().type == 'daily_refill_flow')['flow']}
     return jsonify(data), 200
 
 
