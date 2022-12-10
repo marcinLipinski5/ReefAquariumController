@@ -58,7 +58,7 @@
         },
         "2": {
             "type": "alarm_level",
-            "value": 30
+            "value": 40
         },
         "3": {
             "type": "alarm",

@@ -1,25 +1,29 @@
-from flask import Blueprint, Response, jsonify, request, redirect
+from flask import Blueprint, Response, jsonify, request, redirect, g
 from tinydb import TinyDB, Query
-from time import time
-
-temperature_api = Blueprint('temperature', __name__)
-database = TinyDB('C:\\Users\\Dell\\PycharmProjects\\reefAquariumController\\database\\db.json', indent=4).table("temperature")
+from database.db import Database
 
 
-@temperature_api.route("/status", methods=["GET"])
-def status():
-    data = {'alarm': database.get(Query().type == 'alarm')['state'],
-            'temperature': database.get(Query().type == 'temperature')['value']}
-    return jsonify(data), 200
+def temperature_api(database: Database):
+    temperature = Blueprint('temperature', __name__)
+    # database = TinyDB('C:\\Users\\Dell\\PycharmProjects\\reefAquariumController\\database\\db.json', indent=4).table("temperature")
 
+    @temperature.route("/status", methods=["GET"])
+    def status():
+        data = {'alarm': database.select(table='temperature', column='alarm', boolean_needed=True),
+                'temperature': database.select(table='temperature', column='temperature')}
 
-@temperature_api.route("/settings", methods=["GET", "POST"])
-def settings():
-    if request.method == "POST":
-        database.update({'value': int(request.form.get('alarm_level'))}, Query().type == 'alarm_level')
-        return redirect('/')
-    elif request.method == "GET":
-        data = {'alarm_level': database.get(Query().type == 'alarm_level')['value']}
+        print(database.select(table='temperature', column='temperature'))
         return jsonify(data), 200
-    else:
-        return Response(status=405)
+
+    @temperature.route("/settings", methods=["GET", "POST"])
+    def settings():
+        if request.method == "POST":
+            database.update(table='temperature', column='alarm_level', value=int(request.form.get('alarm_level')))
+            return redirect('/')
+        elif request.method == "GET":
+            data = {'alarm_level': database.select(table='temperature', column='alarm_level')}
+            return jsonify(data), 200
+        else:
+            return Response(status=405)
+
+    return temperature
