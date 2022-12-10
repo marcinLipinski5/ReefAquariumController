@@ -102,3 +102,7 @@ class ReefAquariumController:
 if __name__ == "__main__":
     # Migrations()
     ReefAquariumController().run()
+
+
+def socket_():
+    return None

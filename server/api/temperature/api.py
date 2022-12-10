@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, Response, jsonify, request, redirect
 from tinydb import TinyDB, Query
 from time import time
 
@@ -16,8 +16,8 @@ def status():
 @temperature_api.route("/settings", methods=["GET", "POST"])
 def settings():
     if request.method == "POST":
-        database.update({'value': request.json['alarm_level']}, Query().type == 'alarm_level')
-        return Response(status=200)
+        database.update({'value': int(request.form.get('alarm_level'))}, Query().type == 'alarm_level')
+        return redirect('/')
     elif request.method == "GET":
         data = {'alarm_level': database.get(Query().type == 'alarm_level')['value']}
         return jsonify(data), 200

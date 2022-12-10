@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/main.css">
+    </head>
+   <body>
+    <div class="flex-container">
+        <div class="general__block">
+            <form action="http://127.0.0.1:5000/temperature/settings" method="post">
+                <p class="settings__label__block settings__label__text">Temperature settings</p>
+                <label class="general__block">
+                    <span class="settings__block general__text__settings">Alarm level [&#176;C]</span>                
+                    <input class="settings__block general__text__settings" type="text" name="alarm_level" id="alarm_level"/>
+                </label>
+                <label class="general__block">
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />                                                     
+                </label>
+            </form>
+        </div>
+    </div>
+    <script>
+        fetch("http://127.0.0.1:5000/temperature/settings")
+        .then((response) => {return response.json();})
+        .then((json) => { 
+            document.getElementById("alarm_level").value =  json.alarm_level;
+         });
+</script>
+    </body>
+</html>
+

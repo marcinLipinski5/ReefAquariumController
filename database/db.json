@@ -8,15 +8,15 @@
     "auto_refill": {
         "1": {
             "type": "alarm",
-            "status": true
+            "status": false
         },
         "2": {
             "type": "daily_refill_flow",
-            "flow": 2137
+            "flow": 0
         },
         "3": {
             "type": "max_daily_refill_flow",
-            "flow": 1000
+            "flow": 10000
         },
         "4": {
             "type": "flow_count_date",
@@ -28,7 +28,7 @@
         },
         "6": {
             "type": "refill_max_time_in_seconds",
-            "time": 10
+            "time": 100
         },
         "7": {
             "type": "water_pump_refill_relay_state",
@@ -54,33 +54,51 @@
     "temperature": {
         "1": {
             "type": "temperature",
-            "value": 25.9
+            "value": 40.0
         },
         "2": {
             "type": "alarm_level",
-            "value": 26.0
+            "value": 30
         },
         "3": {
             "type": "alarm",
-            "state": true
+            "state": false
         }
     },
     "feeding": {
         "1": {
             "type": "is_feeding_time",
-            "status": false
+            "state": false
         },
         "2": {
             "type": "start_time",
-            "timestamp": 0
+            "timestamp": 0.0
         },
         "3": {
             "type": "feeding_duration",
-            "seconds": 900
+            "seconds": 60
         },
         "4": {
             "type": "water_pump_state",
             "state": false
+        }
+    },
+    "fan": {
+        "1": {
+            "type": "alarm_level_duty_cycle",
+            "value": 30
+        },
+        "2": {
+            "type": "normal_level_duty_cycle",
+            "value": 20
+        },
+        "3": {
+            "type": "freeze_level_duty_cycle",
+            "value": 10
+        },
+        "4": {
+            "type": "current_level",
+            "level": "freeze"
         }
     }
 }

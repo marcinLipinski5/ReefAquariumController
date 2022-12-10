@@ -8,8 +8,38 @@ body {
   flex-direction: column;
   text-align: center;
   min-height: 500px;
-  flex: 50%;
+  flex: 100%;
   
+}
+
+.settings__block {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: row;
+  padding: 24px 32px;
+  border-radius: 30px;
+  background: white;
+  margin-bottom: 10px;
+  flex: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.settings__label__text {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.settings__label__block {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: row;
+  border-radius: 30px;
+  background: white;
+  margin-bottom: 10px;
+  flex: 100%;
 }
 
 .general__block {
@@ -47,7 +77,7 @@ body {
   align-items: center;
   justify-content: center;
   display: flex;
-  flex: 30%;
+  flex: 25%;
   
 }
 
@@ -55,6 +85,13 @@ body {
   margin-top: 0px;
   margin-bottom: 0px;
   font-size: 60px;
+  font-weight: bold;
+}
+
+.general__text__settings {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 150%;
   font-weight: bold;
 }
 
@@ -69,6 +106,10 @@ body {
   font-size: 10vw;
 }
 
+.material-symbols-outlined {
+  font-size: 10vw;
+}
+
 .general__btn {
   aspect-ratio : 1 / 1;
   width: 70%;
@@ -80,7 +121,7 @@ body {
 }
 
 .timer__btn--start {
-  background: #00b84c;
+  background: #29ce6d;
 }
 
 .timer__btn--stop {
@@ -88,16 +129,20 @@ body {
 }
 
 .settings__btn {
-  background: #8708ef;
+  background: #b569f4;
   text-decoration: none;
 }
 
 .alarm__btn--inactive {
-  background: #00b84c;
+  background: #29ce6d;
 }
 
 .alarm__btn--active {
   background: #ff0000;;
+}
+
+.alarm__btn--freeze {
+  background: #68a8ef;
 }
 
 a:hover, a:visited, a:link, a:active

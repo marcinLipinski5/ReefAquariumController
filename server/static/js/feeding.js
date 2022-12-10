@@ -4,6 +4,7 @@ class Feeding {
     
     this.timeTotal;
     this.remainingSeconds;
+    this.feedingActive;
     this.getFeedingTime();
     this.interval = null;
 
@@ -84,22 +85,31 @@ class Feeding {
       </div>
       <div class="general__button__block">
       <button type="button" class="general__btn settings__btn">
-        <a class="material-icons" href="feeding-settings.html">settings</a>
+        <a class="material-icons" href="html/stats/feeding.html">query_stats</a>
+      </button>
+    </div>
+      <div class="general__button__block">
+      <button type="button" class="general__btn settings__btn">
+        <a class="material-icons" href="html/settings/feeding.html">settings</a>
 			</button>
       </div>
 		`;
   }
 
   getFeedingTime(){
-    fetch("http://127.0.0.1:5000/feeding/feeding-duration")
+    fetch("http://127.0.0.1:5000/feeding/status")
     .then((response) => {return response.json();})
     .then((json) => { this.setFeedingTime(json) });
   }
 
   setFeedingTime(json){
-    this.remainingSeconds = json.feeding_duration
-    this.timeTotal = this.remainingSeconds
+    this.remainingSeconds = json.remaining_time
+    this.timeTotal = json.feeding_duration
+    this.feedingActive = json.is_feeding_time
     this.updateInterfaceTime();
+    if (this.feedingActive) {
+      this.start()
+    }
   }
   
   sendActivateAction(activate) {

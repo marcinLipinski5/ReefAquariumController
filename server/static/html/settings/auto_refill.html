@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/main.css">
+    </head>
+   <body>
+    <div class="flex-container">
+        <div class="general__block">
+            <form action="http://127.0.0.1:5000/auto_refill/settings" method="post">
+                <p class="settings__label__block settings__label__text">Auto refill settings</p>
+                <label class="general__block"  id="flex__block__column">
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Max daily flow [ml]</span>                
+                        <input class="settings__block general__text__settings" type="text" name="max_daily_refill_flow" id="max_daily_refill_flow"/><br>
+                    </div>
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Max interval [s]</span>                
+                        <input class="settings__block general__text__settings" type="text" name="refill_max_time_in_seconds" id="refill_max_time_in_seconds"/><br>
+                    </div>
+                </label>
+                <label class="general__block">
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />                                                     
+                </label>
+            </form>
+        </div>
+    </div>
+    <script>
+        fetch("http://127.0.0.1:5000/auto_refill/settings")
+        .then((response) => {return response.json();})
+        .then((json) => { 
+            document.getElementById("max_daily_refill_flow").value =  json.max_daily_refill_flow;
+            document.getElementById("refill_max_time_in_seconds").value =  json.refill_max_time_in_seconds;
+         });
+</script>
+<style>
+    #flex__block__column {
+      flex-direction: column;
+    }
+  </style>
+    </body>
+</html>
+

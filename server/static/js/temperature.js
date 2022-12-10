@@ -43,8 +43,13 @@ class Temperature {
       </button>
     </div>
     <div class="general__button__block">
+    <button type="button" class="general__btn settings__btn">
+      <a class="material-icons" href="html/stats/temperature.html">query_stats</a>
+    </button>
+  </div>
+    <div class="general__button__block">
       <button type="button" class="general__btn settings__btn">
-        <a class="material-icons" href="temperature-settings.html">settings</a>
+        <a class="material-icons" href="html/settings/temperature.html">settings</a>
 			</button>
     </div>
 		`;

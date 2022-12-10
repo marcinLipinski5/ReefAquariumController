@@ -44,10 +44,17 @@ class Migrations:
             temperature_table.insert({'type': 'alarm', 'state': False})
 
             pump_table = self.database.table('feeding')
-            pump_table.insert({'type': 'is_feeding_time', 'status': False})
+            pump_table.insert({'type': 'is_feeding_time', 'state': False})
             pump_table.insert({'type': 'start_time', 'timestamp': 0})
             pump_table.insert({'type': 'feeding_duration', 'seconds': 600})
             pump_table.insert({'type': 'water_pump_state', 'state': False})
+
+            fan_table = self.database.table('fan')
+            fan_table.insert({'type': 'alarm_level_duty_cycle', 'value': 100})
+            fan_table.insert({'type': 'normal_level_duty_cycle', 'value': 80})
+            fan_table.insert({'type': 'freeze_level_duty_cycle', 'value': 50})
+            fan_table.insert({'type': 'current_level', 'level': 'alarm'})
+
             logging.info("Migration for v1 DONE")
 
 

@@ -14,7 +14,6 @@ class AutoRefill {
   }
 
   updateInterfaceFlowCalc() {
-    console.log(this.daily_refill_flow)
     this.refill.flow.textContent = this.daily_refill_flow.toString().padStart(2, "0")
   }
 
@@ -44,8 +43,13 @@ class AutoRefill {
       </button>
     </div>
     <div class="general__button__block">
+    <button type="button" class="general__btn settings__btn">
+      <a class="material-icons" href="html/stats/feeding.html">query_stats</a>
+    </button>
+  </div>
+    <div class="general__button__block">
       <button type="button" class="general__btn settings__btn">
-        <a class="material-icons" href="auto-refill-settings.html">settings</a>
+        <a class="material-icons" href="html/settings/auto_refill.html">settings</a>
 			</button>
     </div>
 		`;

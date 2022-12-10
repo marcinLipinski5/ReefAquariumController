@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, Response, jsonify, request, redirect
 from tinydb import TinyDB, Query
 from time import time
 
@@ -16,9 +16,9 @@ def status():
 @auto_refill_api.route("/settings", methods=["GET", "POST"])
 def settings():
     if request.method == "POST":
-        database.update({'flow': request.json['max_daily_refill_flow']}, Query().type == 'max_daily_refill_flow')
-        database.update({'time': request.json['refill_max_time_in_seconds']}, Query().type == 'refill_max_time_in_seconds')
-        return Response(status=200)
+        database.update({'flow': int(request.form.get('max_daily_refill_flow'))}, Query().type == 'max_daily_refill_flow')
+        database.update({'time': int(request.form.get('refill_max_time_in_seconds'))}, Query().type == 'refill_max_time_in_seconds')
+        return redirect('/')
     elif request.method == "GET":
         data = {'max_daily_refill_flow': database.get(Query().type == 'max_daily_refill_flow')['flow'],
                 'refill_max_time_in_seconds': database.get(Query().type == 'refill_max_time_in_seconds')['time']}
