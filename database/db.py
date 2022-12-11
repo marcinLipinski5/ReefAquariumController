@@ -85,7 +85,8 @@ class Database:
             try:
                 lock.acquire(True)
                 self.__validate_connection()
-                for statement in self.__que:
+                iteration_list = self.__que.copy()
+                for statement in iteration_list:
                     logging.debug(f"SQL --> {statement}")
                     self.__connection.cursor().execute(statement)
                     self.__connection.commit()
