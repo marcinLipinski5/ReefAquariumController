@@ -1,6 +1,6 @@
 import logging
 import time
-from tinydb import TinyDB, Query
+from database.db import Database
 
 import RPi.GPIO as GPIO
 
@@ -9,9 +9,8 @@ from pins.IOPins import IOPins
 
 class Controller:
 
-    def __init__(self):
-        self.database_temperature = TinyDB('database/db.json', indent=4).table('temperature')
-        self.database_fan = TinyDB('database/db.json', indent=4).table('fan')
+    def __init__(self, database: Database):
+        self.database = database
         self.fan_pwm = IOPins.FAN_PWM.value
 
         GPIO.setup(self.fan_pwm, GPIO.OUT)
@@ -26,8 +25,8 @@ class Controller:
 
     # TODO adjust with real hardware for noise level
     def __get_duty_cycle(self) -> int:
-        temperature_alarm_level = self.database_temperature.get(Query().type == 'alarm_level')['value']
-        current_temperature = self.database_temperature.get(Query().type == 'temperature')['value']
+        temperature_alarm_level = self.database.select(table='temperature', column='alarm_level')
+        current_temperature = self.database.select(table='temperature', column='temperature')
 
         if current_temperature >= temperature_alarm_level and self.level is not 'alarm':
             return self.__save_duty_cycle(level='alarm')
@@ -40,8 +39,8 @@ class Controller:
     def __save_duty_cycle(self, level: str) -> int:
         logging.info(f"Setting {level} level for fan speed.")
         self.level = level
-        self.database_fan.update({'level': level}, Query().type == 'current_level')
-        return self.database_fan.get(Query().type == f'{level}_level_duty_cycle')['value']
+        self.database.update(table='fan', column='current_level', value=level)
+        return self.database.select(table='fan', column=f'{level}_level_duty_cycle')
 
     def __set_duty_cycle(self, duty_cycle: int):
         logging.info(f"Setting duty cycle: {duty_cycle} for PWM fans controller.")

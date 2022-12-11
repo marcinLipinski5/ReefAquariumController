@@ -3,15 +3,15 @@ import time
 from datetime import date
 
 import RPi.GPIO as GPIO
-from tinydb import TinyDB, Query
+from database.db import Database
 
 from pins.IOPins import IOPins
 
 
 class FlowCounter:
 
-    def __init__(self):
-        self.database = TinyDB('database/db.json', indent=4).table("auto_refill")
+    def __init__(self, database: Database):
+        self.database = database
 
         self.pulse_counter = 0
 
@@ -25,8 +25,8 @@ class FlowCounter:
         time.sleep(time_of_refill)
         GPIO.remove_event_detect(self.water_pump_refill_flow_counter)
         print(f"COUNTER OUT: {self.pulse_counter}")
-        self.database.update({'flow': self.database.get(Query().type == 'daily_refill_flow')['flow'] +
-                                      self.__get_flow_in_milliliters()}, Query().type == 'daily_refill_flow')
+        current_flow = self.database.select(table='auto_refill', column='daily_refill_flow')
+        self.database.update(table='auto_refill', column='daily_refill_flow', value=(self.__get_flow_in_milliliters() + current_flow))
 
     def __get_flow_in_milliliters(self) -> float:
         # TODO some calculations here
@@ -37,18 +37,17 @@ class FlowCounter:
         self.pulse_counter += 1
 
     def __should_daily_refill_counter_be_reset(self):
-        return self.database.get(Query().type == 'flow_count_date')['date'] != self.__get_current_date()
+        return self.database.select(table='auto_refill', column='flow_count_date') != self.__get_current_date()
 
     def __reset_counter(self):
         self.__save_daily_flow()
-        self.database.update({'flow': 0}, Query().type == 'daily_refill_flow')
-        self.database.update({'date': self.__get_current_date()}, Query().type == 'flow_count_date')
+        self.database.update(table='auto_refill', column='daily_refill_flow', value=0)
+        self.database.update(table='auto_refill', column='flow_count_date', value=self.__get_current_date())
 
     def __save_daily_flow(self):
-        database = TinyDB('database/daily_flow.json', indent=4).table("daily_flow")
-        date = self.database.get(Query().type == 'flow_count_date')['date']
-        flow = self.database.get(Query().type == 'daily_refill_flow')['flow']
-        database.insert({'date': date, 'flow': flow})
+        flow_count_date = self.database.select(table='auto_refill', column='flow_count_date')
+        flow = self.database.select(table='auto_refill', column='daily_refill_flow')
+        self.database.insert(table='auto_refill_history', columns=['date', 'flow'], values=[flow_count_date, flow])
 
     @staticmethod
     def __get_current_date():

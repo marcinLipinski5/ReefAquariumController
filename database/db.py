@@ -4,31 +4,29 @@ from sqlite3 import Error
 import logging
 import os
 import pathlib
+import threading
+from typing import List
 
 
 class Database:
 
-    def __init__(self):
-        # logging.basicConfig(
-        #     level=logging.DEBUG,
-        #     format="%(asctime)s [%(levelname)s] %(message)s",
-        #     datefmt='%Y-%m-%d %H:%M:%S',
-        #     handlers=[
-        #         logging.FileHandler("aquarium_log.log"),
-        #         logging.StreamHandler()
-        #     ]
-        # )
+    def __init__(self, path: str = os.path.join(os.path.dirname(__file__), "database.sqlite")):
+        self.__path = path
         self.__connection = self.__get_connection()
-        self.__cursor = self.__get_cursor()
         self.__que = []
         self.__retry_counter = 0
         self.__make_migrations()
-        self.__lock = False
+
+    def __del__(self):
+        logging.info("Closing database connection.")
+        self.execute_que()
+        self.__connection.close()
+        logging.info("Database connection successfully closed.")
 
     def __make_migrations(self):
         done_migrations = []
         try:
-            fetch = self.__cursor.execute("SELECT migration FROM info").fetchall()
+            fetch = self.__connection.cursor().execute("SELECT migration FROM info").fetchall()
             for migration in fetch:
                 done_migrations.append(migration[0])
         except:
@@ -38,7 +36,7 @@ class Database:
             if migration.replace(".sql", "") not in done_migrations:
                 with open(os.path.join(migration_scripts_path, migration), 'r') as sql_file:
                     sql_script = sql_file.read()
-                    self.__cursor.executescript(sql_script)
+                    self.__connection.cursor().executescript(sql_script)
                     self.__connection.commit()
                     logging.info(f"Database migration: {migration} done!")
             else:
@@ -46,67 +44,60 @@ class Database:
 
     def __validate_connection(self):
         try:
-            self.__cursor.execute("SELECT * FROM info LIMIT 1;")
+            self.__connection.cursor().execute("SELECT * FROM info LIMIT 1;")
             self.__retry_counter = 0
         except sqlite3.ProgrammingError:
             self.__retry_counter += self.__retry_counter
             logging.warning(f"Broken connection to database. Attempt to reconnect no: {self.__retry_counter}")
             try:
-                self.__cursor.close()
                 self.__connection.close()
             except:
                 logging.warning("Unable to close existing database connections.")
             time.sleep(1)
             self.__connection = self.__get_connection()
-            self.__cursor = self.__get_cursor()
             if self.__retry_counter < 10:
                 self.__validate_connection()
             else:
                 logging.error("Unable to connect to database.")
 
-    @staticmethod
-    def __get_connection():
+    def __get_connection(self):
         connection = None
         try:
-            connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), "database.sqlite"), check_same_thread=False)
+            connection = sqlite3.connect(self.__path, check_same_thread=False)
             logging.info("Connection to SQLite DB successful.")
         except Error as e:
             logging.error(f"Connection to database failed.")
         return connection
 
-    def __get_cursor(self):
-        return self.__connection.cursor()
-
     def __add_to_que(self, statement: str):
-        if self.__lock:
-            logging.warning("Concurrency error. Waiting...")
-            time.sleep(1)
-            self.__add_to_que(statement)
-        self.__lock = True
-        self.__que.append(statement)
-        self.__lock = False
+        lock = threading.Lock()
+        try:
+            lock.acquire(True)
+            self.__que.append(statement)
+        finally:
+            lock.release()
 
     # interface section:
 
     def execute_que(self):
-        if self.__lock:
-            logging.warning("Concurrency error. Waiting...")
-            time.sleep(1)
-            self.execute_que()
-        self.__lock = True
-        self.__validate_connection()
-        for statement in self.__que:
-            self.__cursor.execute(statement)
-            self.__connection.commit()
-            self.__que.remove(statement)
-        self.__que.clear()
-        self.__lock = False
+        if self.__que:
+            lock = threading.Lock()
+            try:
+                lock.acquire(True)
+                self.__validate_connection()
+                for statement in self.__que:
+                    logging.debug(f"SQL --> {statement}")
+                    self.__connection.cursor().execute(statement)
+                    self.__connection.commit()
+                    self.__que.remove(statement)
+            finally:
+                lock.release()
 
     def select(self, table: str, column: str, where: str = None, boolean_needed: bool = False):
         statement = f"SELECT {column} FROM {table}"
         if where:
             statement += where
-        fetch = self.__cursor.execute(statement).fetchone()[0]
+        fetch = self.__connection.cursor().execute(statement).fetchone()[0]
         if boolean_needed:
             return True if fetch == 1 else False
         return fetch
@@ -117,6 +108,14 @@ class Database:
         statement = f"UPDATE {table} SET {column} = {value}"
         self.__add_to_que(statement)
 
+    def insert(self, table: str, columns: List[str], values: List[str]):
+        assert len(columns) == len(values)
+        values = map(str, values)
+        values = ["'" + value for value in values]
+        values = [value + "'" for value in values]
+        statement = f'INSERT INTO {table} ({", ".join(columns)}) VALUES ({", ".join(values)})'
+        self.__add_to_que(statement)
+
 
 if __name__ == "__main__":
     database = Database()
@@ -124,3 +123,6 @@ if __name__ == "__main__":
     print(fetch1)
     fetch2 = database.select(table='temperature', column='alarm', boolean_needed=True)
     print(fetch2)
+    from datetime import datetime
+    database.insert(table='temperature_history', columns=['date_time', 'temperature'], values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 2.2])
+    database.execute_que()

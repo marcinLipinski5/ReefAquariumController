@@ -7,7 +7,7 @@ CREATE TABLE auto_refill(
     alarm INTEGER NOT NULL,
     daily_refill_flow INTEGER NOT NULL,
     max_daily_refill_flow INTEGER NOT NULL,
-    flow_count_date TEXT,
+    flow_count_date DATE,
     refill_time_start REAL NOT NULL,
     refill_max_time_in_seconds INTEGER NOT NULL,
     water_pump_refill_relay_state INTEGER NOT NULL,
@@ -29,7 +29,7 @@ INSERT INTO auto_refill (
     water_level_sensor_down_value_main,
     water_level_sensor_down_value_backup,
     water_level_sensor_up_value)
-    VALUES (1, 0, 0, 1000, 'intro', 0.0, 10, 0, 0, 0, 0, 0);
+    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0);
 
 CREATE TABLE temperature (
     id INTEGER PRIMARY KEY,
@@ -58,5 +58,17 @@ CREATE TABLE fan (
 );
 
 INSERT INTO fan (id, alarm_level_duty_cycle, normal_level_duty_cycle, freeze_level_duty_cycle, current_level) VALUES (1, 100, 80, 50, 'alarm');
+
+CREATE TABLE auto_refill_history (
+    id INTEGER PRIMARY KEY,
+    flow_count_date DATE,
+    flow INTEGER
+);
+
+CREATE TABLE temperature_history (
+    id INTEGER PRIMARY KEY,
+    date_time DATETIME,
+    temperature REAL
+);
 
 INSERT INTO info (migration, description) VALUES ('v1', 'init_tables_for_all_sensors');
