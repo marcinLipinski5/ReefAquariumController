@@ -77,7 +77,6 @@ class TestApi(TestRunner):
         self.assertEqual(self.database.select(table='feeding', column='start_time'), self.temps['feeding_time_started'])
 
     def test_09_should_return_status_when_feeding_is_active(self):
-        sleep(3)
         answer = self.api.get('feeding/status')
         self.assertEqual(answer.status, '200 OK')
         self.assertEqual(self.database.select(table='feeding', column='is_feeding_time', boolean_needed=True), True)
@@ -105,8 +104,8 @@ class TestApi(TestRunner):
         self.assertEqual(answer.json, {'feeding_duration': 600})
 
     def test_12_feeding_should_update_settings(self):
-        answer_post = self.api.post('feeding/settings', data={'feeding_duration': 601})
-        self.assertEqual(answer_post.status, '200 OK')
+        answer_post = self.api.post('feeding/settings', data={'feeding_time': 601})
+        self.assertEqual(answer_post.status, '302 FOUND')
         self.database.execute_que()
         self.assertEqual(self.database.select(table='feeding', column='feeding_duration'), 601)
 

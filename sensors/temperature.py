@@ -4,7 +4,7 @@ from datetime import datetime
 import logging
 
 
-class Controller:
+class Temperature:
 
     def __init__(self, database: Database):
         self.database = database

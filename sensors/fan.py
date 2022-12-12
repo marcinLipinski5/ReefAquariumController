@@ -4,7 +4,7 @@ from database.db import Database
 from pins.gpio_setup import GPIOSetup
 
 
-class Controller:
+class Fan:
 
     def __init__(self, database: Database, gpio_setup: GPIOSetup):
         self.database = database
@@ -13,7 +13,7 @@ class Controller:
 
     def run(self):
         duty_cycle = self.__get_duty_cycle()
-        if duty_cycle is not 0:
+        if duty_cycle != 0:
             self.__set_duty_cycle(duty_cycle)
 
     # TODO adjust with real hardware for noise level
@@ -21,11 +21,11 @@ class Controller:
         temperature_alarm_level = self.database.select(table='temperature', column='alarm_level')
         current_temperature = self.database.select(table='temperature', column='temperature')
 
-        if current_temperature >= temperature_alarm_level and self.level is not 'alarm':
+        if current_temperature >= temperature_alarm_level and self.level != 'alarm':
             return self.__save_duty_cycle(level='alarm')
-        elif current_temperature < (temperature_alarm_level - 1) and self.level is not 'normal':
+        elif (temperature_alarm_level - 2) < current_temperature <= (temperature_alarm_level - 0.1) and self.level != 'normal':
             return self.__save_duty_cycle(level='normal')
-        elif current_temperature < (temperature_alarm_level - 2) and self.level is not 'freeze':
+        elif current_temperature <= (temperature_alarm_level - 2) and self.level != 'freeze':
             return self.__save_duty_cycle(level='freeze')
         return 0  # zero as a code of no changes required
 

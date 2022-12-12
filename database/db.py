@@ -104,6 +104,8 @@ class Database:
     def update(self, table: str, column: str, value, boolean_needed: bool = False):
         if boolean_needed:
             value = 1 if value else 0
+        if type(value) is str:
+            value = "'" + value + "'"
         statement = f"UPDATE {table} SET {column} = {value}"
         self.__add_to_que(statement)
 
@@ -114,14 +116,3 @@ class Database:
         values = [value + "'" for value in values]
         statement = f'INSERT INTO {table} ({", ".join(columns)}) VALUES ({", ".join(values)})'
         self.__add_to_que(statement)
-
-
-if __name__ == "__main__":
-    database = Database()
-    fetch1 = database.select(table='temperature', column="alarm_level")
-    print(fetch1)
-    fetch2 = database.select(table='temperature', column='alarm', boolean_needed=True)
-    print(fetch2)
-    from datetime import datetime
-    database.insert(table='temperature_history', columns=['date_time', 'temperature'], values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 2.2])
-    database.execute_que()

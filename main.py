@@ -3,10 +3,10 @@ import threading
 import time
 import traceback
 #
-# from sensors.auto_refill.controller import Controller as AutoRefillController
-# from sensors.temperature.controller import Controller as TemperatureController
-# from sensors.fan.controller import Controller as FanController
-# from sensors.feeding.controller import Controller as FeedingController
+# from sensors.auto_refill.controller import  Controller as AutoRefillController
+# from sensors.temperature import Temperature as TemperatureController
+# from sensors.fan import Fan as FanController
+# from sensors.feeding import Feeding as FeedingController
 # from watchdog.watchdog import Watchdog
 from server.main import Server
 from database.db import Database

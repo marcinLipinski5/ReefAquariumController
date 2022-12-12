@@ -4,3 +4,4 @@ flask
 w1thermsensor
 flask-cors
 flask-socketio
+Mock.GPIO

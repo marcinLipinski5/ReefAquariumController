@@ -1,5 +1,8 @@
-import RPi.GPIO as GPIO
-from IOPins import IOPins
+try:
+    import RPi.GPIO as GPIO
+except ModuleNotFoundError:
+    import Mock.GPIO as GPIO
+from pins.IOPins import IOPins
 
 
 class GPIOSetup:

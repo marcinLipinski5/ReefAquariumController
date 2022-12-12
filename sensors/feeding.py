@@ -7,7 +7,7 @@ from database.db import Database
 from pins.IOPins import IOPins
 
 
-class Controller:
+class Feeding:
 
     def __init__(self, database: Database, gpio_setup: GPIOSetup):
         self.gpio = gpio_setup
