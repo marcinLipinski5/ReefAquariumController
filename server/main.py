@@ -1,14 +1,13 @@
 import logging
 
-from flask import Flask, render_template, g
+from flask import Flask, render_template
 from flask_cors import CORS
-from flask_socketio import SocketIO
 from database.db import Database
 
-from api.auto_refill.api import auto_refill_api
-from api.fan.api import fan_api
-from api.feeding.api import feeding_api
-from api.temperature.api import temperature_api
+from api.auto_refill import auto_refill_api
+from api.fan import fan_api
+from api.feeding import feeding_api
+from api.temperature import temperature_api
 
 
 class Server:
@@ -40,6 +39,7 @@ class Server:
 
     def get_test_instance(self):
         self.prepare()
+        self.app.testing = True
         return self.app.test_client()
 
 

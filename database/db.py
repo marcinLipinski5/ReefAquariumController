@@ -18,10 +18,8 @@ class Database:
         self.__make_migrations()
 
     def __del__(self):
-        logging.info("Closing database connection.")
         self.execute_que()
         self.__connection.close()
-        logging.info("Database connection successfully closed.")
 
     def __make_migrations(self):
         done_migrations = []

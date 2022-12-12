@@ -26,7 +26,7 @@ def feeding_api(database: Database):
 
     @feeding.route("/status", methods=["GET"])
     def status():
-        data = {"is_feeding_time": database.select(table='feeding', column='is_feeding_time'),
+        data = {"is_feeding_time": database.select(table='feeding', column='is_feeding_time', boolean_needed=True),
                 "feeding_duration": database.select(table='feeding', column='feeding_duration')}
         start_time = database.select(table='feeding', column='start_time')
         if start_time != 0:
