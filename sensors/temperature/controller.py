@@ -18,7 +18,6 @@ class Controller:
         self.__save_temperature_to_db(temperature)
 
     def __save_temperature_to_db(self, temperature: float):
-        ts = datetime.timestamp(datetime.now())
         if abs(self.last_read - temperature) >= 0.2:
             logging.debug(f"Current temperature: {temperature}")
             self.database.update(table='temperature', column='temperature', value=temperature)

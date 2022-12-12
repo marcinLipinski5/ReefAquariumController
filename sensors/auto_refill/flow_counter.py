@@ -2,28 +2,31 @@
 import time
 from datetime import date
 
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 from database.db import Database
 
-from pins.IOPins import IOPins
+# from pins.IOPins import IOPins
+from pins.gpio_setup import GPIOSetup
 
 
 class FlowCounter:
 
-    def __init__(self, database: Database):
+    def __init__(self, database: Database, gpio_setup: GPIOSetup):
         self.database = database
-
+        self.gpio = gpio_setup
         self.pulse_counter = 0
 
-        self.water_pump_refill_flow_counter = IOPins.WATER_PUMP_REFILL_FLOW_COUNTER.value
-        GPIO.setup(self.water_pump_refill_flow_counter, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        # self.water_pump_refill_flow_counter = IOPins.WATER_PUMP_REFILL_FLOW_COUNTER.value
+        # GPIO.setup(self.water_pump_refill_flow_counter, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def run(self, time_of_refill: int):
         print(f"COUNTER IN: {self.pulse_counter}")
         if self.__should_daily_refill_counter_be_reset(): self.__reset_counter()
-        GPIO.add_event_detect(self.water_pump_refill_flow_counter, GPIO.RISING, callback=self.count_pulse)
+        self.gpio.add_event_detect(self.gpio.water_pump_refill_flow_counter.value, 'RISING', self.count_pulse)
+        # GPIO.add_event_detect(self.water_pump_refill_flow_counter, GPIO.RISING, callback=self.count_pulse)
         time.sleep(time_of_refill)
-        GPIO.remove_event_detect(self.water_pump_refill_flow_counter)
+        self.gpio.remove_event_detect(self.gpio.water_pump_refill_flow_counter.value)
+        # GPIO.remove_event_detect(self.water_pump_refill_flow_counter)
         print(f"COUNTER OUT: {self.pulse_counter}")
         current_flow = self.database.select(table='auto_refill', column='daily_refill_flow')
         self.database.update(table='auto_refill', column='daily_refill_flow', value=(self.__get_flow_in_milliliters() + current_flow))

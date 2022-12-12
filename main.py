@@ -1,16 +1,16 @@
 import logging
 import threading
-# import RPi.GPIO as GPIO
 import time
 import traceback
 #
-# from auto_refill.controller import Controller as AutoRefillController
-# from temperature.controller import Controller as TemperatureController
-# from fan.controller import Controller as FanController
-# from feeding.controller import Controller as FeedingController
+# from sensors.auto_refill.controller import Controller as AutoRefillController
+# from sensors.temperature.controller import Controller as TemperatureController
+# from sensors.fan.controller import Controller as FanController
+# from sensors.feeding.controller import Controller as FeedingController
 # from watchdog.watchdog import Watchdog
 from server.main import Server
 from database.db import Database
+from pins.gpio_setup import GPIOSetup
 
 
 # noinspection PyArgumentList
@@ -26,15 +26,13 @@ class ReefAquariumController:
             ]
         )
 
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setwarnings(False)
-        #
+        gpio = GPIOSetup()
         self.database = Database()
-        # self.auto_refill = AutoRefillController(self.database)
-        # self.temperature = TemperatureController(self.database)
-        # self.fan = FanController(self.database)
-        # self.feeding = FeedingController(self.database)
-        # self.watchdog = Watchdog(self.database)
+        # self.auto_refill = AutoRefillController(self.database, gpio)
+        # self.temperature = TemperatureController(self.database, gpio)
+        # self.fan = FanController(self.database, gpio)
+        # self.feeding = FeedingController(self.database, gpio)
+        # self.watchdog = Watchdog(self.database, gpio)
         self.server = Server(self.database)
         #
         self.database_thread = threading.Thread(target=self.update_database, args=(), daemon=True)

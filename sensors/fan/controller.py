@@ -1,21 +1,14 @@
 import logging
-import time
+
 from database.db import Database
-
-import RPi.GPIO as GPIO
-
-from pins.IOPins import IOPins
+from pins.gpio_setup import GPIOSetup
 
 
 class Controller:
 
-    def __init__(self, database: Database):
+    def __init__(self, database: Database, gpio_setup: GPIOSetup):
         self.database = database
-        self.fan_pwm = IOPins.FAN_PWM.value
-
-        GPIO.setup(self.fan_pwm, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.fan_pwm, 1024)
-        self.pwm.start(0)
+        self.gpio_setup = gpio_setup
         self.level = ''
 
     def run(self):
@@ -44,4 +37,4 @@ class Controller:
 
     def __set_duty_cycle(self, duty_cycle: int):
         logging.info(f"Setting duty cycle: {duty_cycle} for PWM fans controller.")
-        self.pwm.ChangeDutyCycle(duty_cycle)
+        self.gpio_setup.change_pwm(duty_cycle)
