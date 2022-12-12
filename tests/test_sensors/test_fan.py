@@ -1,9 +1,7 @@
-import time
-
-from tests.test_runner import TestRunner
-from tests.gpio_mock import GPIOSetup
 from database.db import Database
 from sensors.fan import Fan
+from tests.gpio_mock import GPIOSetup
+from tests.test_runner import TestRunner
 
 
 class TestFan(TestRunner):
@@ -20,22 +18,25 @@ class TestFan(TestRunner):
     def test_02_should_return_freeze_for_23_5_degree(self):
         self.execute_sequence_for_level_check(temperature=23.5, expected_level='freeze', expected_duty_cycle=50)
 
-    def test_03_should_return_freeze_for_24_5_degree(self):
+    def test_03_should_return_normal_for_24_1_degree(self):
+        self.execute_sequence_for_level_check(temperature=24.1, expected_level='normal', expected_duty_cycle=80)
+
+    def test_04_should_return_normal_for_24_5_degree(self):
         self.execute_sequence_for_level_check(temperature=24.5, expected_level='normal', expected_duty_cycle=80)
 
-    def test_04_should_return_normal_for_25_degree(self):
+    def test_05_should_return_normal_for_25_degree(self):
         self.execute_sequence_for_level_check(temperature=25.0, expected_level='normal', expected_duty_cycle=80)
 
-    def test_05_should_return_normal_for_25_5_degree(self):
+    def test_06_should_return_normal_for_25_5_degree(self):
         self.execute_sequence_for_level_check(temperature=25.5, expected_level='normal', expected_duty_cycle=80)
 
-    def test_05_should_return_normal_for_25_9_degree(self):
+    def test_07_should_return_normal_for_25_9_degree(self):
         self.execute_sequence_for_level_check(temperature=25.9, expected_level='normal', expected_duty_cycle=80)
 
-    def test_05_should_return_alarm_for_26_degree(self):
+    def test_08_should_return_alarm_for_26_degree(self):
         self.execute_sequence_for_level_check(temperature=26.0, expected_level='alarm', expected_duty_cycle=100)
 
-    def test_06_should_return_alarm_for_27_degree(self):
+    def test_09_should_return_alarm_for_27_degree(self):
         self.execute_sequence_for_level_check(temperature=27.0, expected_level='alarm', expected_duty_cycle=100)
 
     def execute_sequence_for_level_check(self, temperature: float, expected_level: str, expected_duty_cycle: int):
