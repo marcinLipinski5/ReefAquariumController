@@ -37,6 +37,9 @@ class GPIOSetup:
         # feeding
         self.water_pump_relay = IOPins.WATER_PUMP_RELAY
 
+        # temperature
+        self.heater_relay = IOPins.HEATER_RELAY
+
     # fan
     def change_pwm(self, duty_cycle):
         self.pwm.ChangeDutyCycle(duty_cycle)

@@ -92,11 +92,14 @@ class Database:
             finally:
                 lock.release()
 
-    def select(self, table: str, column: str, where: str = None, boolean_needed: bool = False):
+    def select(self, table: str, column: str, where: str = None, boolean_needed: bool = False, single: bool = True):
         statement = f"SELECT {column} FROM {table}"
         if where:
             statement += where
-        fetch = self.__connection.cursor().execute(statement).fetchone()[0]
+        if single:
+            fetch = self.__connection.cursor().execute(statement).fetchone()[0]
+        else:
+            fetch = self.__connection.cursor().execute(statement).fetchall()
         if boolean_needed:
             return True if fetch == 1 else False
         return fetch

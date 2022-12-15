@@ -12,9 +12,9 @@ CREATE TABLE auto_refill(
     refill_max_time_in_seconds INTEGER NOT NULL,
     water_pump_refill_relay_state INTEGER NOT NULL,
     limit_switch_state INTEGER NOT NULL,
-    water_level_sensor_down_value_main INTEGER NOT NULL,
-    water_level_sensor_down_value_backup INTEGER NOT NULL,
-    water_level_sensor_up_value INTEGER NOT NULL);
+    water_level_sensor_down_value_main_state INTEGER NOT NULL,
+    water_level_sensor_down_value_backup_state INTEGER NOT NULL,
+    water_level_sensor_up_value_state INTEGER NOT NULL);
 
 INSERT INTO auto_refill (
     id,
@@ -26,18 +26,19 @@ INSERT INTO auto_refill (
     refill_max_time_in_seconds,
     water_pump_refill_relay_state,
     limit_switch_state,
-    water_level_sensor_down_value_main,
-    water_level_sensor_down_value_backup,
-    water_level_sensor_up_value)
+    water_level_sensor_down_value_main_state,
+    water_level_sensor_down_value_backup_state,
+    water_level_sensor_up_value_state)
     VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0);
 
 CREATE TABLE temperature (
     id INTEGER PRIMARY KEY,
     temperature REAL NOT NULL,
     alarm_level REAL NOT NULL,
-    alarm INTEGER NOT NULL);
+    alarm INTEGER NOT NULL,
+    heater_state INTEGER NOT NULL);
 
-INSERT  INTO temperature (id, temperature, alarm_level, alarm) VALUES (1, 0.0, 26.0, 0);
+INSERT  INTO temperature (id, temperature, alarm_level, alarm, heater_state) VALUES (1, 0.0, 26.0, 0, 1);
 
 CREATE TABLE feeding (
     id INTEGER PRIMARY KEY,

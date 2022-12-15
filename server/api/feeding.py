@@ -13,15 +13,12 @@ def feeding_api(database: Database):
         if command and database.select(table='feeding', column='is_feeding_time'):
             return Response(status=304)
         is_feeding_time = False
-        start_time = 0.0
         if command:
             is_feeding_time = True
-            start_time = time()
             logging.info("Feeding started. Stopping all pumps.")
         else:
             logging.info("Feeding stopped. Starting all pumps.")
         database.update(table='feeding', column='is_feeding_time', value=is_feeding_time)
-        database.update(table='feeding', column='start_time', value=start_time)
         return Response(status=200)
 
     @feeding.route("/status", methods=["GET"])
@@ -32,8 +29,9 @@ def feeding_api(database: Database):
         if start_time != 0:
             calculated_time = round(database.select(table='feeding', column='feeding_duration') - (time() - start_time))
             data['remaining_time'] = calculated_time
-            if calculated_time < 0:
+            if calculated_time < 0:  # calculation error and state reset
                 database.update(table='feeding', column='is_feeding_time', value=False, boolean_needed=True)
+                database.update(table='feeding', column='start_time', value=0.0)
                 data['remaining_time'] = database.select(table='feeding', column='feeding_duration')
                 logging.warning("Feeding system error!")
         else:

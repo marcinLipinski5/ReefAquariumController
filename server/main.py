@@ -4,10 +4,10 @@ from flask import Flask, render_template
 from flask_cors import CORS
 from database.db import Database
 
-from api.auto_refill import auto_refill_api
-from api.fan import fan_api
-from api.feeding import feeding_api
-from api.temperature import temperature_api
+from server.api.auto_refill import auto_refill_api
+from server.api.fan import fan_api
+from server.api.feeding import feeding_api
+from server.api.temperature import temperature_api
 
 
 class Server:
