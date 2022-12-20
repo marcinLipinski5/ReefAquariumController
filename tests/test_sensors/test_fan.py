@@ -39,6 +39,27 @@ class TestFan(TestRunner):
     def test_09_should_return_alarm_for_27_degree(self):
         self.execute_sequence_for_level_check(temperature=27.0, expected_level='alarm', expected_duty_cycle=100)
 
+    def test_10_should_do_nothing_if_no_changes_required_and_level_if_freeze(self):
+        self.execute_sequence_for_level_check(temperature=22.0, expected_level='freeze', expected_duty_cycle=50)
+        self.database.update(table='temperature', column='temperature', value=22.1)
+        self.database.execute_que()
+        self.fan.run()
+        self.assertEqual(0, len(self.database.get_que()))
+
+    def test_11_should_do_nothing_if_no_changes_required_and_level_if_normal(self):
+        self.execute_sequence_for_level_check(temperature=25.0, expected_level='normal', expected_duty_cycle=80)
+        self.database.update(table='temperature', column='temperature', value=25.1)
+        self.database.execute_que()
+        self.fan.run()
+        self.assertEqual(0, len(self.database.get_que()))
+
+    def test_12_should_do_nothing_if_no_changes_required_and_level_if_alarm(self):
+        self.execute_sequence_for_level_check(temperature=26.0, expected_level='alarm', expected_duty_cycle=100)
+        self.database.update(table='temperature', column='temperature', value=26.1)
+        self.database.execute_que()
+        self.fan.run()
+        self.assertEqual(0, len(self.database.get_que()))
+
     def execute_sequence_for_level_check(self, temperature: float, expected_level: str, expected_duty_cycle: int):
         self.database.update(table='temperature', column='temperature', value=temperature)
         self.database.execute_que()

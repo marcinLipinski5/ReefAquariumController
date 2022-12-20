@@ -2,12 +2,9 @@ import logging
 import time
 import traceback
 
-# import RPi.GPIO as GPIO
 from database.db import Database
-
-from sensors.auto_refill.flow_counter import FlowCounter
-from pins.IOPins import IOPins
 from pins.gpio_setup import GPIOSetup
+from sensors.auto_refill.flow_counter import FlowCounter
 
 
 class Controller:
@@ -15,7 +12,6 @@ class Controller:
     def __init__(self, database: Database, gpio_setup: GPIOSetup):
         self.database = database
         self.gpio = gpio_setup
-        self.max_refill_time = self.__get_refill_max_time_in_seconds()
         self.alarm = self.__get_alarm()
 
     def run(self):
@@ -29,19 +25,22 @@ class Controller:
                 self.database.update(table='auto_refill', column='refill_time_start', value=time.time())
                 self.gpio.set(self.gpio.water_pump_refill_relay.value, 1)
                 self.database.update(table='auto_refill', column='water_pump_refill_relay_state', value=True, boolean_needed=True)
-                FlowCounter(self.database, self.gpio).run(self.max_refill_time)
+                self.__run_flow_counter()
             except:
                 logging.error("An error occurs during refill pump switching process")
-                raise
             finally:
                 self.gpio.set(self.gpio.water_pump_refill_relay.value, 0)
                 self.database.update(table='auto_refill', column='water_pump_refill_relay_state', value=False, boolean_needed=True)
                 self.database.update(table='auto_refill', column='refill_time_start', value=0.0)
                 logging.info("Auto refill pump successfuly stopped")
 
+    def __run_flow_counter(self):
+        logging.debug("Running flow counter")
+        FlowCounter(self.database, self.gpio).run()
+
     def __check_level_sensor_state(self, sensor_pin: int, sensor_description: str) -> bool:  # TODO adjust to NC/NO sensor structure
         state = self.gpio.get(sensor_pin)
-        logging.debug(f"Sensor state on pin: {sensor_pin} -> {state}")
+        logging.debug(f"Sensor state on pin: {sensor_pin} name: {sensor_description} -> {state}")
         self.database.update(table='auto_refill', column=f'{sensor_description.lower()}_state', value=state, boolean_needed=True)
         return state
 
@@ -60,7 +59,6 @@ class Controller:
             alarm_state = True if (up_value_sensor or self.__is_daily_water_flow_reached()) else False
         except:
             logging.warning(f"Unable to collect info about auto refill state. {traceback.print_exc()}")
-            raise
         self.__set_alarm(alarm_state)
 
     def __should_pump_be_active(self) -> bool:
@@ -90,5 +88,3 @@ class Controller:
     def __get_alarm(self) -> bool:
         return self.database.select(table='auto_refill', column='alarm', boolean_needed=True)
 
-    def __get_refill_max_time_in_seconds(self):
-        return self.database.select(table='auto_refill', column='refill_max_time_in_seconds')

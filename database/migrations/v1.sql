@@ -62,7 +62,7 @@ INSERT INTO fan (id, alarm_level_duty_cycle, normal_level_duty_cycle, freeze_lev
 
 CREATE TABLE auto_refill_history (
     id INTEGER PRIMARY KEY,
-    flow_count_date DATE,
+    date DATE,
     flow INTEGER
 );
 

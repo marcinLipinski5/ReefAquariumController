@@ -1,3 +1,5 @@
+import logging
+
 try:
     import RPi.GPIO as GPIO
 except ModuleNotFoundError:
@@ -49,7 +51,7 @@ class GPIOSetup:
     def add_event_detect(gpio_number: int, event: str, callback):
         assert event in ['RISING']
         event = GPIO.RISING if event == 'RISING' else 'ERROR'
-        GPIO.add_event_detect(gpio_number, event, callback=callback)
+        GPIO.add_event_detect(gpio_number, event, callback=callback, bouncetime=10)
 
     @staticmethod
     def remove_event_detect(gpio_number: int):
@@ -60,6 +62,7 @@ class GPIOSetup:
     def set(gpio_number: int, level: int):
         assert level in [0, 1]
         level = GPIO.LOW if level == 0 else GPIO.HIGH
+        logging.debug(f"GPIO --> Setting state: {level} for GPIO: {IOPins(gpio_number).name}")
         GPIO.output(gpio_number, level)
 
     @staticmethod

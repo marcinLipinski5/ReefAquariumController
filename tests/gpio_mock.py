@@ -26,6 +26,7 @@ class GPIOSetup:
         self.heater_relay = IOPins.HEATER_RELAY
 
         # output capture
+        self.event_record_active_mode = False
         self.gpio_status = {}
         self.change_pwm_out = {'duty_cycle': 'value not set'}
         self.add_event_detect_out = {'gpio_number': 'value not set', 'event': 'value not set', 'callback': 'value not set'}
@@ -39,15 +40,19 @@ class GPIOSetup:
         self.add_event_detect_out['gpio_number'] = gpio_number
         self.add_event_detect_out['event'] = event
         self.add_event_detect_out['callback'] = callback
+        if self.event_record_active_mode:
+            callback(None)
 
     def remove_event_detect(self, gpio_number: int):
         self.remove_event_detect_out['gpio_number'] = gpio_number
 
     def set(self, gpio_number: int, level: int):
+        self.mock_gpio_status(gpio_number, level)
         self.set_out['gpio_number'] = gpio_number
         self.set_out['level'] = level
 
     def get(self, gpio_number: int):
+        print(self.gpio_status)
         return self.gpio_status[gpio_number]
 
     def mock_gpio_status(self, pin_number: int, status: int):

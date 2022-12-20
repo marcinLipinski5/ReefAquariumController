@@ -78,7 +78,7 @@ class TestTemperature(TestRunner):
         self.assertFalse(self.database.select(table='temperature', column='heater_state', boolean_needed=True))
         self.assertEqual(1, self.gpio.set_out['level'])
 
-    def test_08_should_disable_alarm_and_run_heater_if_temp_fail_below_alarm_level_again(self):
+    def test_08_should_disable_alarm_and_run_heater_if_temp_falls_below_alarm_level_again(self):
         self.temperature.sensor.set_temperature(26.0)
         self.temperature.run()
         self.database.execute_que()
@@ -91,3 +91,4 @@ class TestTemperature(TestRunner):
         self.assertFalse(self.database.select(table='temperature', column='alarm', boolean_needed=True))
         self.assertEqual(0, self.gpio.set_out['level'])
         self.assertTrue(self.database.select(table='temperature', column='heater_state', boolean_needed=True))
+

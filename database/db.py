@@ -77,6 +77,9 @@ class Database:
 
     # interface section:
 
+    def get_que(self):
+        return self.__que
+
     def execute_que(self):
         if self.__que:
             lock = threading.Lock()
@@ -92,10 +95,10 @@ class Database:
             finally:
                 lock.release()
 
-    def select(self, table: str, column: str, where: str = None, boolean_needed: bool = False, single: bool = True):
+    def select(self, table: str, column: str = "*", where: str = None, boolean_needed: bool = False, single: bool = True):
         statement = f"SELECT {column} FROM {table}"
         if where:
-            statement += where
+            statement += f' WHERE {where}'
         if single:
             fetch = self.__connection.cursor().execute(statement).fetchone()[0]
         else:
