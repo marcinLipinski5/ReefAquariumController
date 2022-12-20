@@ -26,6 +26,7 @@ class FlowCounter:
             self.__reset_counter()
         else:
             self.__count()
+        print(self.pulse_counter)
         self.pulse_counter = 0
 
     def __count(self):
@@ -39,8 +40,7 @@ class FlowCounter:
 
     def __get_flow_in_milliliters(self) -> float:
         # TODO some calculations here
-        result = self.pulse_counter * 2
-        return result
+        return self.pulse_counter / 7.5
 
     def count_pulse(self, _):
         self.pulse_counter += 1
@@ -64,3 +64,7 @@ class FlowCounter:
 
     def __get_refill_max_time_in_seconds(self):
         return self.database.select(table='auto_refill', column='refill_max_time_in_seconds')
+
+
+if __name__ == "__main__":
+    FlowCounter(Database(':memory:'), GPIOSetup())
