@@ -40,7 +40,9 @@ class FlowCounter:
 
     def __get_flow_in_milliliters(self) -> float:
         # TODO some calculations here
-        return self.pulse_counter / 7.5
+        flow_ml = self.pulse_counter / 7.5
+        print(f"flow in ml: {flow_ml}")
+        return flow_ml
 
     def count_pulse(self, _):
         self.pulse_counter += 1
