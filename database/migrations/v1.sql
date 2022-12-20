@@ -29,7 +29,7 @@ INSERT INTO auto_refill (
     water_level_sensor_down_value_main_state,
     water_level_sensor_down_value_backup_state,
     water_level_sensor_up_value_state)
-    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0);
+    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 15, 0, 0, 0, 0, 0);
 
 CREATE TABLE temperature (
     id INTEGER PRIMARY KEY,

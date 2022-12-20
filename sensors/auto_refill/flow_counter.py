@@ -40,7 +40,7 @@ class FlowCounter:
 
     def __get_flow_in_milliliters(self) -> float:
         # TODO some calculations here
-        flow_ml = self.pulse_counter / 7.5
+        flow_ml = self.pulse_counter / 4.4682539
         print(f"flow in ml: {flow_ml}")
         return flow_ml
 
@@ -69,4 +69,4 @@ class FlowCounter:
 
 
 if __name__ == "__main__":
-    FlowCounter(Database(':memory:'), GPIOSetup())
+    FlowCounter(Database(':memory:'), GPIOSetup()).run()
