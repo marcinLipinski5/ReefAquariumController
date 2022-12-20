@@ -14,7 +14,12 @@ CREATE TABLE auto_refill(
     limit_switch_state INTEGER NOT NULL,
     water_level_sensor_down_value_main_state INTEGER NOT NULL,
     water_level_sensor_down_value_backup_state INTEGER NOT NULL,
-    water_level_sensor_up_value_state INTEGER NOT NULL);
+    water_level_sensor_up_value_state INTEGER NOT NULL,
+    calibration INTEGER NOT NULL,
+    pulses_per_ml REAL NOT NULL,
+    calibration_flow REAL NOT NULL,
+    calibration_pulses INTEGER NOT NULL,
+    calibration_stage VARCHAR NOT NULL);
 
 INSERT INTO auto_refill (
     id,
@@ -28,8 +33,13 @@ INSERT INTO auto_refill (
     limit_switch_state,
     water_level_sensor_down_value_main_state,
     water_level_sensor_down_value_backup_state,
-    water_level_sensor_up_value_state)
-    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 15, 0, 0, 0, 0, 0);
+    water_level_sensor_up_value_state,
+    calibration,
+    pulses_per_ml,
+    calibration_flow,
+    calibration_pulses,
+    calibration_stage)
+    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0, 0, 4.4682539, 100, 500, 'done');
 
 CREATE TABLE temperature (
     id INTEGER PRIMARY KEY,

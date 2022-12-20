@@ -110,3 +110,28 @@ class TestController(TestRunner):
         self.assertFalse(self.database.select(table='auto_refill', column='alarm', boolean_needed=True))
         run_flow_counter.assert_called_once()
 
+    # FIXME
+    @mock.patch.object(Controller, '_Controller__get_flow_counter_calibration_data')
+    def test_08_should_perform_calibrations_if_needed(self, get_flow_counter_calibration_data=mock.MagicMock):
+        self.database.update(table='auto_refill', column='calibration', value=True, boolean_needed=True)
+        self.database.update(table='auto_refill', column='calibration_flow', value=200)
+        self.gpio.mock_gpio_status(self.gpio.limit_switch.value, 0)
+        self.database.execute_que()
+        get_flow_counter_calibration_data.return_value = 1000
+
+        self.assertEqual('done', self.controller.calibration_stage)
+        self.controller.run()
+        self.database.execute_que()
+        self.assertEqual(1000, self.database.select(table='auto_refill', column='calibration_pulses'))
+        get_flow_counter_calibration_data.assert_called_once()
+        self.assertEqual('pulse_counting', self.controller.calibration_stage)
+
+        self.controller.run()
+        self.database.execute_que()
+        self.assertEqual('done', self.controller.calibration_stage)
+        self.assertEqual(1000/200, self.database.select(table='auto_refill', column='pulses_per_ml'))
+        self.assertFalse(self.database.select(table='auto_refill', column='calibration', boolean_needed=True))
+
+
+
+

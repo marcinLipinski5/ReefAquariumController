@@ -120,6 +120,10 @@ body {
   cursor: pointer;
 }
 
+.info__text__block {
+  text-align: left;
+}
+
 .timer__btn--start {
   background: #29ce6d;
 }

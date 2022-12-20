@@ -21,7 +21,35 @@
                     </div>
                 </label>
                 <label class="general__block">
-                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />                                                     
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save settings" />                                                     
+                </label>
+            </form>
+        </div>
+        <div class="general__block">
+            <form action="http://127.0.0.1:5000/auto_refill/calibration/save" method="post">
+                <p class="settings__label__block settings__label__text">Auto refill calibration</p>
+                <div class="general__block">
+                    <p class="general__text__settings info__text__block">
+                        <br> 1. Put refil hose to the clean container
+                        <br> 2. Click "Start" button
+                        <br> 3. Capture all water pumped by refill pump 
+                        <br> 4. Measure amount of water pumped by refill pump
+                        <br> 5. Provide this value in "Captured flow" field
+                        <br> 6. Click "Save calibration"
+                        <br> 7. It is possible than more than one calibration will be required
+                    </p>    
+                </div>
+                <label class="general__block">
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Captured flow [ml]</span>
+                        <input class="settings__block general__text__settings" type="text" name="calibration_flow" id="calibration_flow"/><br>
+                    </div>
+                </label>
+                <label class="general__block">
+                    <a href="http://127.0.0.1:5000/auto_refill/calibration/start" onclick="change_button_text()" class="settings__block general general__text__settings alarm__btn--inactive" id="start_button">Start</a>
+                </label>
+                <label class="general__block">
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save calibration" />
                 </label>
             </form>
         </div>
@@ -32,7 +60,15 @@
         .then((json) => { 
             document.getElementById("max_daily_refill_flow").value =  json.max_daily_refill_flow;
             document.getElementById("refill_max_time_in_seconds").value =  json.refill_max_time_in_seconds;
+            document.getElementById("calibration_flow").value =  json.calibration_flow;
          });
+         function change_button_text() {
+            var start_button = document.getElementById("start_button");
+            start_button.innerHTML = "Wait till the end of calibration process! Provide measured value and then click Save calibration!";
+            start_button.classList.remove("alarm__btn--inactive")
+            start_button.classList.add("timer__btn--stop")
+         }
+
 </script>
 <style>
     #flex__block__column {

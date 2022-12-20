@@ -35,7 +35,7 @@ class Server:
 
     def run(self):
         self.prepare()
-        self.app.run()
+        self.app.run(port=5000)
 
     def get_test_instance(self):
         self.prepare()
@@ -44,4 +44,4 @@ class Server:
 
 
 if __name__ == "__main__":
-    Server().run()
+    Server(Database(':memory:')).run()

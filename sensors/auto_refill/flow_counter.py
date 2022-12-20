@@ -16,6 +16,10 @@ class FlowCounter:
         self.pulse_counter = 0
         self.first_run = True
 
+    def get_calibrations_data(self):
+        self.__count()
+        return self.pulse_counter
+
     def run(self):
         logging.debug(f"COUNTER IN: {self.pulse_counter}")
         if self.first_run:
@@ -26,7 +30,6 @@ class FlowCounter:
             self.__reset_counter()
         else:
             self.__count()
-        print(self.pulse_counter)
         self.pulse_counter = 0
 
     def __count(self):
@@ -40,8 +43,8 @@ class FlowCounter:
 
     def __get_flow_in_milliliters(self) -> float:
         # TODO some calculations here
-        flow_ml = self.pulse_counter / 4.4682539
-        print(f"flow in ml: {flow_ml}")
+        flow_ml = self.pulse_counter / self.database.select(table='auto_refill', column='pulses_per_ml')
+        logging.debug(f"Flow: {flow_ml}[ml]")
         return flow_ml
 
     def count_pulse(self, _):

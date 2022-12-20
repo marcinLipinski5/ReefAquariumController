@@ -18,7 +18,7 @@ class ReefAquariumController:
     def __init__(self):
         logging.basicConfig(
             level=logging.DEBUG,
-            format="%(asctime)s [%(levelname)s] %(message)s",
+            format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s",
             datefmt='%Y-%m-%d %H:%M:%S',
             handlers=[
                 logging.StreamHandler()
@@ -42,20 +42,20 @@ class ReefAquariumController:
     def run(self):
         self.database_thread.start()
         self.sensors_thread.start()
-        self.watchdog_thread.start()
+        # self.watchdog_thread.start()
         self.server_thread.start()
         while True:
-            active_threads = []
-            for thread in threading.enumerate():
-                active_threads.append(thread.name)
-            try:
-                assert 'database_thread' in  active_threads
-                assert 'sensors_thread' in active_threads
-                assert 'watchdog_thread' in active_threads
-                assert 'server_thread' in active_threads
-            except AssertionError:
-                logging.error(f"Some threads are missing in {threading.enumerate()}. Restarting...")
-                break
+            # active_threads = []
+            # for thread in threading.enumerate():
+            #     active_threads.append(thread.name)
+            # try:
+            #     assert 'database_thread' in  active_threads
+            #     assert 'sensors_thread' in active_threads
+            #     assert 'watchdog_thread' in active_threads
+            #     assert 'server_thread' in active_threads
+            # except AssertionError:
+            #     logging.error(f"Some threads are missing in {threading.enumerate()}. Restarting...")
+            #     break
             time.sleep(1)
 
     def run_sensors(self):
@@ -63,10 +63,10 @@ class ReefAquariumController:
         logging.info("Starting sensors thread")
         while fail_counter < 10:
             try:
-                self.temperature.run()
+                # self.temperature.run()
                 self.auto_refill.run()
-                self.fan.run()
-                self.feeding.run()
+                # self.fan.run()
+                # self.feeding.run()
                 time.sleep(10)
                 fail_counter = 0
             except:

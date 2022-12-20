@@ -14,10 +14,11 @@ class TestFlowCounter(TestRunner):
         self.database = Database(':memory:')
         self.gpio = GPIOSetup()
         self.flow_counter = FlowCounter(self.database, self.gpio)
+        self.database.update(table="auto_refill", column="refill_max_time_in_seconds", value=0.1)
+        self.database.update(table="auto_refill", column="pulses_per_ml", value=0.5)
+        self.database.execute_que()
 
     def test_01_should_add_and_delete_event_detect(self):
-        self.database.update(table="auto_refill", column="refill_max_time_in_seconds", value=0.1)
-        self.database.execute_que()
         self.flow_counter.run()
         self.database.execute_que()
 
@@ -27,8 +28,6 @@ class TestFlowCounter(TestRunner):
         self.assertEqual(26, self.gpio.remove_event_detect_out['gpio_number'])
 
     def test_02_on_first_run_should_update_database_historic_data(self):
-        self.database.update(table="auto_refill", column="refill_max_time_in_seconds", value=0.1)
-        self.database.execute_que()
         self.flow_counter.pulse_counter = 10
         self.flow_counter.run()
         self.database.execute_que()
@@ -39,9 +38,6 @@ class TestFlowCounter(TestRunner):
         self.assertEqual(20, self.database.select(table='auto_refill_history', column='flow')) # TODO change when real sensor support will be implemented
 
     def test_03_should_sum_flow_from_different_runs(self):
-        self.database.update(table="auto_refill", column="refill_max_time_in_seconds", value=0.1)
-        self.database.execute_que()
-
         self.flow_counter.pulse_counter = 10
         self.flow_counter.run()
         self.database.execute_que()
@@ -54,9 +50,6 @@ class TestFlowCounter(TestRunner):
         self.assertEqual(1, len(self.database.select(table='auto_refill_history', single=False)))
 
     def test_04_should_save_historic_data_and_reset_flow_counter_if_next_day_appears(self):
-        self.database.update(table="auto_refill", column="refill_max_time_in_seconds", value=0.1)
-        self.database.execute_que()
-
         self.flow_counter.pulse_counter = 10
         self.flow_counter.run()
         self.database.execute_que()
@@ -91,9 +84,6 @@ class TestFlowCounter(TestRunner):
         self.assertAlmostEquals(0.5, time_stop-time_start, delta=0.1)
 
     def test_06_should_use_event_record_callback_for_calculations(self):
-        self.database.update(table="auto_refill", column="refill_max_time_in_seconds", value=0.1)
-        self.database.execute_que()
-
         self.gpio.event_record_active_mode = True
         self.flow_counter.run()
         self.database.execute_que()

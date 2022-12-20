@@ -52,7 +52,6 @@ class GPIOSetup:
         self.set_out['level'] = level
 
     def get(self, gpio_number: int):
-        print(self.gpio_status)
         return self.gpio_status[gpio_number]
 
     def mock_gpio_status(self, pin_number: int, status: int):

@@ -13,10 +13,14 @@ class Controller:
         self.database = database
         self.gpio = gpio_setup
         self.alarm = self.__get_alarm()
+        self.calibration_stage = 'done'
 
     def run(self):
         logging.debug("Start main method for AUTO REFILL")
         if self.__check_limit_switch_state():
+            return
+        if self.__is_calibration_active():
+            self.__calibration()
             return
         self.__check_alarm_conditions()
         if self.__should_pump_be_active():
@@ -88,3 +92,33 @@ class Controller:
     def __get_alarm(self) -> bool:
         return self.database.select(table='auto_refill', column='alarm', boolean_needed=True)
 
+    def __is_calibration_active(self):
+        if not self.database.select(table='auto_refill', column='calibration', boolean_needed=True):
+            return False
+        elif self.database.select(table='auto_refill', column='calibration', boolean_needed=True) \
+                and self.database.select(table='auto_refill', column='calibration_stage') == 'data_collecting':
+            return True
+        elif self.database.select(table='auto_refill', column='calibration', boolean_needed=True) \
+                and self.database.select(table='auto_refill', column='calibration_stage') == 'processing':
+            pulses_per_ml = round(self.database.select(table='auto_refill', column='calibration_pulses') / self.database.select(table='auto_refill', column='calibration_flow'), 5)
+            self.database.update(table='auto_refill', column='pulses_per_ml', value=pulses_per_ml)
+            self.database.update(table='auto_refill', column='calibration_stage', value="done")
+            self.database.update(table='auto_refill', column='calibration', value=False, boolean_needed=True)
+            return False
+        return False
+
+    def __calibration(self):
+        logging.info('Starting calibration for flow counter.')
+        self.gpio.set(self.gpio.water_pump_refill_relay.value, 1)
+        pulses = self.__get_flow_counter_calibration_data()
+        self.gpio.set(self.gpio.water_pump_refill_relay.value, 0)
+        if pulses == 0:
+            logging.error('Unable to collect data for flow calibrations. Break calibration process. Calibration failed.')
+            self.calibration_stage = 'done'
+            self.database.update(table='auto_refill', column='calibration', value=False, boolean_needed=True)
+        else:
+            self.database.update(table='auto_refill', column='calibration_pulses', value=pulses)
+        logging.info(f'Stopping calibration for flow counter. Pulse count: {pulses}')
+
+    def __get_flow_counter_calibration_data(self):
+        return FlowCounter(self.database, self.gpio).get_calibrations_data()
