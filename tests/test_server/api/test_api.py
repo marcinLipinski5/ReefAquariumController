@@ -80,6 +80,12 @@ class TestApi(TestRunner):
         answer = self.api.delete('/temperature/settings')
         self.assertEqual(answer.status, '405 METHOD NOT ALLOWED')
 
+    def test_temperature_05_should_plot_historical_data(self):
+        answer = self.api.get('temperature/plot')
+        self.assertEqual(answer.status, '200 OK')
+        self.database.execute_que()
+        self.assertEqual('text/html; charset=utf-8', answer.content_type)
+
 #  Feeding API section
 
     def test_feeding_01_start_should_start_feeding(self):
@@ -187,3 +193,9 @@ class TestApi(TestRunner):
         self.assertEqual(self.database.select(table='auto_refill', column='calibration_stage'), 'processing')
         self.assertTrue(self.database.select(table='auto_refill', column='calibration', boolean_needed=True))
         self.assertEqual(self.database.select(table='auto_refill', column='calibration_flow'), 21.37)
+
+    def test_auto_refill_07_should_plot_historical_data(self):
+        answer = self.api.get('auto_refill/plot')
+        self.assertEqual(answer.status, '200 OK')
+        self.database.execute_que()
+        self.assertEqual('text/html; charset=utf-8', answer.content_type)

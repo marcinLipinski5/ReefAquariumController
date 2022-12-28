@@ -1,5 +1,9 @@
-from flask import Blueprint, Response, jsonify, request, redirect, g
+from flask import Blueprint, Response, jsonify, request, redirect, render_template
 from database.db import Database
+import pandas as pd
+import json
+import plotly
+import plotly.express as px
 
 
 def temperature_api(database: Database):
@@ -21,5 +25,13 @@ def temperature_api(database: Database):
             return jsonify(data), 200
         else:
             return Response(status=405)
+
+    @temperature.route("/plot")
+    def plot_historic_data():
+        historic_data = database.select(table='temperature_history', column='date_time, temperature', single=False)
+        df = pd.DataFrame(historic_data, columns=['date', 'temperature [*C]'])
+        fig = px.line(df, x='date', y='temperature [*C]', title='Temperature')
+        graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        return render_template('historic_plot.html', graphJSON=graph_json)
 
     return temperature

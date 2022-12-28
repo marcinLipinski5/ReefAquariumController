@@ -84,8 +84,8 @@ class Feeding {
       </button>
       </div>
       <div class="general__button__block">
-      <button type="button" class="general__btn settings__btn">
-        <a class="material-icons" href="html/stats/feeding.html">query_stats</a>
+      <button type="button" class="general__btn settings__btn__inactive">
+        <a class="material-icons">query_stats</a>
       </button>
     </div>
       <div class="general__button__block">
@@ -97,7 +97,7 @@ class Feeding {
   }
 
   getFeedingTime(){
-    fetch("http://127.0.0.1:5000/feeding/status")
+    fetch("/feeding/status")
     .then((response) => {return response.json();})
     .then((json) => { this.setFeedingTime(json) });
   }
@@ -114,7 +114,7 @@ class Feeding {
   
   sendActivateAction(activate) {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://127.0.0.1:5000/feeding/start", true);
+    xhttp.open("POST", "/feeding/start", true);
     xhttp.setRequestHeader("Content-type", "text/plain");
     xhttp.send(JSON.stringify({"activate": activate}));
   }

@@ -44,7 +44,7 @@ class Temperature {
     </div>
     <div class="general__button__block">
     <button type="button" class="general__btn settings__btn">
-      <a class="material-icons" href="html/stats/temperature.html">query_stats</a>
+      <a class="material-icons" href="/temperature/plot">query_stats</a>
     </button>
   </div>
     <div class="general__button__block">
@@ -56,7 +56,7 @@ class Temperature {
   }
 
   getTemperatureStatus(){
-    fetch("http://127.0.0.1:5000/temperature/status")
+    fetch("/temperature/status")
     .then((response) => {return response.json();})
     .then((json) => { this.setTemperatureStatus(json) });
   }

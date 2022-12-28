@@ -49,8 +49,8 @@ class Fan {
       </button>
     </div>
     <div class="general__button__block">
-    <button type="button" class="general__btn settings__btn">
-      <a class="material-icons" href="html/stats/feeding.html">query_stats</a>
+    <button type="button" class="general__btn settings__btn__inactive">
+      <a class="material-icons">query_stats</a>
     </button>
   </div>
     <div class="general__button__block">
@@ -62,7 +62,7 @@ class Fan {
   }
 
   getFanStatus(){
-    fetch("http://127.0.0.1:5000/fan/status")
+    fetch("/fan/status")
     .then((response) => {return response.json();})
     .then((json) => { this.setFanStatus(json) });
   }

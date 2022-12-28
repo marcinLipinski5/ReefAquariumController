@@ -6,3 +6,6 @@ flask-cors
 flask-socketio
 Mock.GPIO
 coverage
+tqdm
+pandas
+plotly

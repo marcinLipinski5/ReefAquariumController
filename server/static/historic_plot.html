@@ -1,0 +1,20 @@
+<!--TODO add css support, responsive etc. Raw plots right now.-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+   <body>
+         <div id='chart' class='chart'></div>
+   </body>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script type="text/javascript">
+            var chart = {{graphJSON | safe}};
+            var data = chart["data"];
+            var layout = chart["layout"];
+            var config = {responsive: true};
+            Plotly.newPlot("chart", data, layout, config);
+        </script>
+</html>

@@ -1,4 +1,8 @@
-from flask import Blueprint, Response, jsonify, request, redirect, url_for
+from flask import Blueprint, Response, jsonify, request, redirect, render_template
+import pandas as pd
+import json
+import plotly
+import plotly.express as px
 
 from database.db import Database
 
@@ -41,5 +45,13 @@ def auto_refill_api(database: Database):
             return redirect('/')
         else:
             return Response(status=405)
+
+    @auto_refill.route("/plot")
+    def plot_historic_data():
+        historic_data = database.select(table='auto_refill_history', column='date, flow', single=False)
+        df = pd.DataFrame(historic_data, columns=['date', 'flow [ml]'])
+        fig = px.bar(df, x='date', y='flow [ml]', barmode='group', title='Daily flow')
+        graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        return render_template('historic_plot.html', graphJSON=graph_json)
 
     return auto_refill

@@ -8,8 +8,8 @@ body {
   flex-direction: column;
   text-align: center;
   min-height: 500px;
-  flex: 100%;
-  
+  max-width: 800px
+
 }
 
 .settings__block {
@@ -103,7 +103,7 @@ body {
 }
 
 .material-icons {
-  font-size: 10vw;
+  font-size: 6vw;
 }
 
 .material-symbols-outlined {
@@ -134,6 +134,11 @@ body {
 
 .settings__btn {
   background: #b569f4;
+  text-decoration: none;
+}
+
+.settings__btn__inactive {
+  background: #9a989b;
   text-decoration: none;
 }
 

@@ -44,4 +44,4 @@ class Server:
 
 
 if __name__ == "__main__":
-    Server(Database(':memory:')).run()
+    Server(Database()).run()
