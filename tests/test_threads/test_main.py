@@ -36,6 +36,6 @@ class TestMain(TestRunner):
     # def test_07_should_create_watchdog_object(self):
     #     self.assertIsInstance(self.main.watchdog, Watchdog)
 
-    def test_08_should_run_threads(self):
-        self.main.run()
-        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    # def test_08_should_run_threads(self):
+    #     self.main.run()
+    #     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')

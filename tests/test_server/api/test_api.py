@@ -153,7 +153,7 @@ class TestApi(TestRunner):
     def test_auto_refill_02_should_return_settings(self):
         answer = self.api.get('auto_refill/settings')
         self.assertEqual(answer.status, '200 OK')
-        self.assertEqual(answer.json, {'max_daily_refill_flow': 1000, 'refill_max_time_in_seconds': 10})
+        self.assertEqual(answer.json, {'calibration_flow': 100.0, 'max_daily_refill_flow': 1000, 'refill_max_time_in_seconds': 10})
 
     def test_auto_refill_03_should_update_settings(self):
         answer_post = self.api.post('auto_refill/settings', data={'max_daily_refill_flow': 1001, 'refill_max_time_in_seconds': 11})
@@ -163,7 +163,7 @@ class TestApi(TestRunner):
         self.assertEqual(self.database.select(table='auto_refill', column='refill_max_time_in_seconds'), 11)
         answer_get = self.api.get('auto_refill/settings')
         self.assertEqual(answer_get.status, '200 OK')
-        self.assertEqual(answer_get.json, {'max_daily_refill_flow': 1001, 'refill_max_time_in_seconds': 11})
+        self.assertEqual(answer_get.json, {'calibration_flow': 100.0, 'max_daily_refill_flow': 1001, 'refill_max_time_in_seconds': 11})
 
     def test_auto_refill_04_should_return_wrong_method_http_code(self):
         answer = self.api.put('/auto_refill/settings')
@@ -172,3 +172,18 @@ class TestApi(TestRunner):
         self.assertEqual(answer.status, '405 METHOD NOT ALLOWED')
         answer = self.api.delete('/feeding/settings')
         self.assertEqual(answer.status, '405 METHOD NOT ALLOWED')
+
+    def test_auto_refill_05_should_start_calibration(self):
+        answer = self.api.get('auto_refill/calibration/start')
+        self.assertEqual(answer.status, '204 NO CONTENT')
+        self.database.execute_que()
+        self.assertEqual(self.database.select(table='auto_refill', column='calibration_stage'), 'data_collecting')
+        self.assertTrue(self.database.select(table='auto_refill', column='calibration', boolean_needed=True))
+
+    def test_auto_refill_06_should_save_calibration(self):
+        answer = self.api.post('auto_refill/calibration/save', data={'calibration_flow': 21.37})
+        self.assertEqual(answer.status, '302 FOUND')
+        self.database.execute_que()
+        self.assertEqual(self.database.select(table='auto_refill', column='calibration_stage'), 'processing')
+        self.assertTrue(self.database.select(table='auto_refill', column='calibration', boolean_needed=True))
+        self.assertEqual(self.database.select(table='auto_refill', column='calibration_flow'), 21.37)
