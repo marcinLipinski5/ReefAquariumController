@@ -41,14 +41,14 @@ class Controller:
         logging.debug("Running flow counter")
         FlowCounter(self.database, self.gpio).run()
 
-    def __check_level_sensor_state(self, sensor_pin: int, sensor_description: str) -> bool:  # TODO adjust to NC/NO sensor structure
+    def __check_level_sensor_state(self, sensor_pin: int, sensor_description: str) -> bool:
         state = self.gpio.get(sensor_pin)
         logging.debug(f"Sensor state on pin: {sensor_pin} name: {sensor_description} -> {state}")
         self.database.update(table='auto_refill', column=f'{sensor_description.lower()}_state', value=state, boolean_needed=True)
         return state
 
-    def __check_limit_switch_state(self) -> bool:  # TODO adjust to NC/NO switch structure
-        state = self.gpio.get(self.gpio.limit_switch.value)
+    def __check_limit_switch_state(self) -> bool:
+        state = not self.gpio.get(self.gpio.limit_switch.value)
         self.database.update(table='auto_refill', column='limit_switch_state', value=state, boolean_needed=True)
         if state:
             logging.warning("Limit switch is open. Can not execute auto-refill process.")
@@ -59,7 +59,7 @@ class Controller:
         try:
             up_value_sensor = self.__check_level_sensor_state(self.gpio.water_level_sensor_up_value.value,
                                                               self.gpio.water_level_sensor_up_value.name)
-            alarm_state = True if (up_value_sensor or self.__is_daily_water_flow_reached()) else False
+            alarm_state = True if (not up_value_sensor or self.__is_daily_water_flow_reached()) else False
         except:
             logging.warning(f"Unable to collect info about auto refill state. {traceback.print_exc()}")
         self.__set_alarm(alarm_state)
