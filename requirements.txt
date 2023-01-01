@@ -1,5 +1,4 @@
 RPi.GPIO
-tinydb
 flask
 w1thermsensor
 flask-cors
@@ -9,3 +8,7 @@ coverage
 tqdm
 pandas
 plotly
+board
+adafruit-blinka
+adafruit-circuitpython-ads1x15
+numpy
