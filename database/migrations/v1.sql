@@ -82,4 +82,39 @@ CREATE TABLE temperature_history (
     temperature REAL
 );
 
+CREATE TABLE ph (
+    id INTEGER PRIMARY KEY,
+    m REAL NOT NULL,
+    b REAL NOT NULL,
+    ph REAL NOT NULL,
+    process VARCHAR NOT NULL,
+    alarm INTEGER NOT NULL,
+    alarm_level REAL NOT NULL,
+    calibration_time_start REAL NOT NULL,
+    calibration_ph VARCHAR NOT NULL,
+    calibration_voltage_4_0 REAL NOT NULL,
+    calibration_voltage_7_0 REAL NOT NULL
+);
+
+INSERT INTO ph (id,
+                m,
+                b,
+                ph,
+                process,
+                alarm,
+                alarm_level,
+                calibration_time_start,
+                calibration_ph,
+                calibration_voltage_4_0,
+                calibration_voltage_7_0)
+                VALUES (1, 1.0, 2.0, 7.0, 'work', 0, 8.0, 0.0, '7_0', 1.0, 1.0);
+
+CREATE TABLE ph_history (
+    id INTEGER PRIMARY KEY,
+    date_time DATETIME,
+    ph REAL NOT NULL
+);
+
 INSERT INTO info (migration, description) VALUES ('v1', 'init_tables_for_all_sensors');
+
+

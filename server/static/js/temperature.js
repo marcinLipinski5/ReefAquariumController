@@ -14,7 +14,7 @@ class Temperature {
   }
 
   updateInterfaceTemperature() {
-    this.temperatureElement.temperature.textContent = this.temperature.toString().padStart(2, "0")
+    this.temperatureElement.temperature.textContent = this.temperature.toFixed(1).toString().padStart(2, "0")
   }
 
   updateInterfaceAlarm() {

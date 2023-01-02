@@ -8,6 +8,7 @@ from server.api.auto_refill import auto_refill_api
 from server.api.fan import fan_api
 from server.api.feeding import feeding_api
 from server.api.temperature import temperature_api
+from server.api.ph import ph_api
 
 
 class Server:
@@ -31,6 +32,7 @@ class Server:
         self.app.register_blueprint(auto_refill_api(self.__database), url_prefix='/auto_refill')
         self.app.register_blueprint(temperature_api(self.__database), url_prefix="/temperature")
         self.app.register_blueprint(fan_api(self.__database), url_prefix='/fan')
+        self.app.register_blueprint(ph_api(self.__database), url_prefix="/ph")
         logging.info('Server started!')
 
     def run(self):
