@@ -38,9 +38,11 @@ class GPIOSetup:
 
         # # feeding
         self.water_pump_relay = IOPins.WATER_PUMP_RELAY
+        GPIO.setup(self.water_pump_relay.value, GPIO.OUT)
 
         # # temperature
         self.heater_relay = IOPins.HEATER_RELAY
+        GPIO.setup(self.heater_relay.value, GPIO.OUT)
 
     # # fan
     def change_pwm(self, duty_cycle):
