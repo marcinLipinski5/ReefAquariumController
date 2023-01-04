@@ -2,10 +2,10 @@ import time
 
 from flask import Blueprint, Response, jsonify, request, redirect, render_template
 from database.db import Database
-import pandas as pd
+# import pandas as pd
 import json
-import plotly
-import plotly.express as px
+# import plotly
+# import plotly.express as px
 
 
 def ph_api(database: Database):
@@ -29,13 +29,13 @@ def ph_api(database: Database):
         else:
             return Response(status=405)
 
-    @ph.route("/plot")
-    def plot_historic_data():
-        historic_data = database.select(table='ph_history', column='date_time, ph', single=False)
-        df = pd.DataFrame(historic_data, columns=['date', 'pH'])
-        fig = px.line(df, x='date', y='pH', title='pH')
-        graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return render_template('historic_plot.html', graphJSON=graph_json)
+    # @ph.route("/plot")
+    # def plot_historic_data():
+    #     historic_data = database.select(table='ph_history', column='date_time, ph', single=False)
+    #     df = pd.DataFrame(historic_data, columns=['date', 'pH'])
+    #     fig = px.line(df, x='date', y='pH', title='pH')
+    #     graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    #     return render_template('historic_plot.html', graphJSON=graph_json)
 
     @ph.route("/calibration", methods=["POST"])
     def calibration_start():

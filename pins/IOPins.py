@@ -12,7 +12,7 @@ class IOPins(Enum):
     FAN_PWM = 12
     WATER_PUMP_RELAY = 13
     LIMIT_SWITCH = 6
-    HEATER_RELAY = 2139
+    HEATER_RELAY = 21
     # 7
     # 8
     # 9

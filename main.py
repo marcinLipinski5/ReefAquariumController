@@ -68,10 +68,10 @@ class ReefAquariumController:
         logging.info("Starting sensors thread")
         while fail_counter < 10:
             try:
-                # self.temperature.run()
+                self.temperature.run()
                 self.auto_refill.run()
-                # self.fan.run()
-                # self.feeding.run()
+                self.fan.run()
+                self.feeding.run()
                 time.sleep(10)
                 fail_counter = 0
             except:
