@@ -46,9 +46,10 @@ CREATE TABLE temperature (
     temperature REAL NOT NULL,
     alarm_level REAL NOT NULL,
     alarm INTEGER NOT NULL,
-    heater_state INTEGER NOT NULL);
+    heater_state INTEGER NOT NULL,
+    update_needed INTEGER NOT NULL);
 
-INSERT  INTO temperature (id, temperature, alarm_level, alarm, heater_state) VALUES (1, 0.0, 26.0, 0, 1);
+INSERT  INTO temperature (id, temperature, alarm_level, alarm, heater_state, update_needed) VALUES (1, 0.0, 26.0, 0, 1, 0);
 
 CREATE TABLE feeding (
     id INTEGER PRIMARY KEY,

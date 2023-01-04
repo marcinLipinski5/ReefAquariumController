@@ -19,6 +19,7 @@ def temperature_api(database: Database):
     def settings():
         if request.method == "POST":
             database.update(table='temperature', column='alarm_level', value=int(request.form.get('alarm_level')))
+            database.update(table='temperature', column='update_needed', value=True, boolean_needed=True)
             return redirect('/')
         elif request.method == "GET":
             data = {'alarm_level': database.select(table='temperature', column='alarm_level')}

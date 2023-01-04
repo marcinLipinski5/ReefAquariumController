@@ -36,13 +36,12 @@ class FlowCounter:
         self.gpio.add_event_detect(self.gpio.water_pump_refill_flow_counter.value, 'RISING', self.count_pulse)
         time.sleep(self.__get_refill_max_time_in_seconds())
         self.gpio.remove_event_detect(self.gpio.water_pump_refill_flow_counter.value)
-        logging.debug(f"COUNTER OUT: {self.pulse_counter}")
         current_flow = self.database.select(table='auto_refill', column='daily_refill_flow')
         self.database.update(table='auto_refill', column='daily_refill_flow',
                              value=(self.__get_flow_in_milliliters() + current_flow))
+        logging.debug(f"COUNTER OUT: {self.pulse_counter}")
 
     def __get_flow_in_milliliters(self) -> float:
-        # TODO some calculations here
         flow_ml = self.pulse_counter / self.database.select(table='auto_refill', column='pulses_per_ml')
         logging.debug(f"Flow: {flow_ml}[ml]")
         return flow_ml
@@ -54,8 +53,9 @@ class FlowCounter:
         return self.database.select(table='auto_refill', column='flow_count_date') != self.__get_current_date()
 
     def __reset_counter(self):
+        logging.debug('Resetting auto refill flow counter.')
         self.__save_daily_flow()
-        self.database.update(table='auto_refill', column='daily_refill_flow', value=0)
+        self.database.update(table='auto_refill', column='daily_refill_flow', value=0.0)
         self.database.update(table='auto_refill', column='flow_count_date', value=self.__get_current_date())
 
     def __save_daily_flow(self):
@@ -69,7 +69,3 @@ class FlowCounter:
 
     def __get_refill_max_time_in_seconds(self):
         return self.database.select(table='auto_refill', column='refill_max_time_in_seconds')
-
-
-if __name__ == "__main__":
-    FlowCounter(Database(':memory:'), GPIOSetup()).run()

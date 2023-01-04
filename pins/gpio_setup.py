@@ -17,8 +17,8 @@ class GPIOSetup:
         # # fan section
         self.pwm = IOPins.FAN_PWM
         GPIO.setup(self.pwm.value, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pwm.value, 1024)
-        self.pwm.start(0)
+        self.pwm = GPIO.PWM(self.pwm.value, 100_000)
+        self.pwm.start(100)
 
         # auto refill section
         self.water_level_sensor_down_value_main = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_MAIN

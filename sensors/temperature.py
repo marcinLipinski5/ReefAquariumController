@@ -42,6 +42,6 @@ class Temperature:
         self.database.update(table='temperature', column='heater_state', value=not state, boolean_needed=True)
         self.alarm = state
         if state:
-            self.gpio.set(self.gpio.heater_relay.value, 1)  # TODO adjust NO/NC
+            self.gpio.set(self.gpio.heater_relay.value, 1)
         else:
             self.gpio.set(self.gpio.heater_relay.value, 0)
