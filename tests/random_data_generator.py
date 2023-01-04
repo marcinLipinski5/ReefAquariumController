@@ -27,6 +27,6 @@ class RandomDataGenerator:
 
 
 if __name__ == '__main__':
-    RandomDataGenerator().generate_random_data_temperature(1000)
+    RandomDataGenerator().generate_random_data_flow(600)
 
 

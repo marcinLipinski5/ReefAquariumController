@@ -8,7 +8,7 @@
    <body>
     <div class="flex-container">
         <div class="general__block">
-            <form action="http://127.0.0.1:5000/temperature/settings" method="post">
+            <form action="/temperature/settings" method="post">
                 <p class="settings__label__block settings__label__text">Temperature settings</p>
                 <label class="general__block">
                     <span class="settings__block general__text__settings">Alarm level [&#176;C]</span>                
@@ -21,7 +21,7 @@
         </div>
     </div>
     <script>
-        fetch("http://127.0.0.1:5000/temperature/settings")
+        fetch("/temperature/settings")
         .then((response) => {return response.json();})
         .then((json) => { 
             document.getElementById("alarm_level").value =  json.alarm_level;

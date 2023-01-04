@@ -68,3 +68,7 @@ class GPIOSetup:
     @staticmethod
     def get(gpio_number: int):
         return True if GPIO.input(gpio_number) == 1 else False
+
+    @staticmethod
+    def get_gpio_instance():
+        return GPIO

@@ -40,23 +40,28 @@ class ReefAquariumController:
         self.server_thread = threading.Thread(target=self.run_server, args=(), daemon=True, name='server_thread')
 
     def run(self):
-        self.database_thread.start()
-        self.sensors_thread.start()
-        # self.watchdog_thread.start()
-        self.server_thread.start()
-        while True:
-            # active_threads = []
-            # for thread in threading.enumerate():
-            #     active_threads.append(thread.name)
-            # try:
-            #     assert 'database_thread' in  active_threads
-            #     assert 'sensors_thread' in active_threads
-            #     assert 'watchdog_thread' in active_threads
-            #     assert 'server_thread' in active_threads
-            # except AssertionError:
-            #     logging.error(f"Some threads are missing in {threading.enumerate()}. Restarting...")
-            #     break
-            time.sleep(1)
+        try:
+            self.database_thread.start()
+            self.sensors_thread.start()
+            # self.watchdog_thread.start()
+            self.server_thread.start()
+            while True:
+                # active_threads = []
+                # for thread in threading.enumerate():
+                #     active_threads.append(thread.name)
+                # try:
+                #     assert 'database_thread' in  active_threads
+                #     assert 'sensors_thread' in active_threads
+                #     assert 'watchdog_thread' in active_threads
+                #     assert 'server_thread' in active_threads
+                # except AssertionError:
+                #     logging.error(f"Some threads are missing in {threading.enumerate()}. Restarting...")
+                #     break
+                time.sleep(1)
+        except:
+            logging.error("Critical error. Closing down application")
+        finally:
+            GPIOSetup.get_gpio_instance().cleanup()
 
     def run_sensors(self):
         fail_counter = 0

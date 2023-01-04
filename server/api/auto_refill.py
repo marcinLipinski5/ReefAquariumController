@@ -34,7 +34,7 @@ def auto_refill_api(database: Database):
     def calibration_start():
         database.update(table='auto_refill', column='calibration_stage', value="data_collecting")
         database.update(table='auto_refill', column='calibration', value=True, boolean_needed=True)
-        return ('', 204)
+        return '', 204
 
     @auto_refill.route("/calibration/save", methods=["POST"])
     def calibration_save():

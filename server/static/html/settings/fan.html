@@ -8,7 +8,7 @@
    <body>
     <div class="flex-container">
         <div class="general__block">
-            <form action="http://127.0.0.1:5000/fan/settings" method="post">
+            <form action="/fan/settings" method="post">
                 <p class="settings__label__block settings__label__text">Fan PWM settings</p>
                 <label class="general__block"  id="flex__block__column">
                     <div class="general__block">
@@ -31,7 +31,7 @@
         </div>
     </div>
     <script>
-        fetch("http://127.0.0.1:5000/fan/settings")
+        fetch("/fan/settings")
         .then((response) => {return response.json();})
         .then((json) => { 
             document.getElementById("alarm_level").value =  json.alarm_level_duty_cycle;

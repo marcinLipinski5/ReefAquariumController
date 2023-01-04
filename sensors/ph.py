@@ -15,7 +15,7 @@ from Adafruit_ADS1x15.analog_in import AnalogIn
 from database.db import Database
 
 
-class Controller:
+class Ph:
 
     def __init__(self, database: Database):
         logging.debug("Starting Ph sensor main method")
