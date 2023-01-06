@@ -19,6 +19,7 @@ def fan_api(database: Database):
         if request.method == "POST":
             for level in levels:
                 database.update(table='fan', column=f'{level}_level_duty_cycle', value=int(request.form.get(f'{level}_level')))
+                database.update(table='fan', column='update_needed', value=True, boolean_needed=True)
             return redirect('/')
         elif request.method == "GET":
             data = {}

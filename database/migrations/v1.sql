@@ -68,10 +68,11 @@ CREATE TABLE fan (
     alarm_level_duty_cycle INTEGER NOT NULL,
     normal_level_duty_cycle INTEGER NOT NULL,
     freeze_level_duty_cycle INTEGER NOT NULL,
-    current_level TEXT
+    current_level TEXT,
+    update_needed INTEGER NOT NULL
 );
 
-INSERT INTO fan (id, alarm_level_duty_cycle, normal_level_duty_cycle, freeze_level_duty_cycle, current_level) VALUES (1, 100, 80, 50, 'alarm');
+INSERT INTO fan (id, alarm_level_duty_cycle, normal_level_duty_cycle, freeze_level_duty_cycle, current_level, update_needed) VALUES (1, 100, 80, 50, 'alarm', 0);
 
 CREATE TABLE auto_refill_history (
     id INTEGER PRIMARY KEY,

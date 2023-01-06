@@ -21,7 +21,7 @@ class Fan:
     def __get_level(self) -> str:
         temperature_alarm_level = self.database.select(table='temperature', column='alarm_level')
         current_temperature = self.database.select(table='temperature', column='temperature')
-        update = self.database.select(table='temperature', column='update_needed', boolean_needed=True)
+        update = self.database.select(table='fan', column='update_needed', boolean_needed=True)
 
         if current_temperature >= temperature_alarm_level and (self.level != 'alarm' or update):
             return 'alarm'
@@ -35,7 +35,7 @@ class Fan:
         logging.info(f"Setting {level} level for fan speed.")
         self.level = level
         self.database.update(table='fan', column='current_level', value=level)
-        self.database.update(table='temperature', column='update_needed', value=False, boolean_needed=True)
+        self.database.update(table='fan', column='update_needed', value=False, boolean_needed=True)
 
     def __set_duty_cycle(self, duty_cycle: int):
         logging.info(f"Setting duty cycle: {duty_cycle} for PWM fans controller.")
