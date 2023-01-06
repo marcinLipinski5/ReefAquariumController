@@ -73,9 +73,9 @@ class ReefAquariumController:
             try:
                 logging.debug('############ SENSOR ITERATION ############')
                 # self.temperature.run()
-                self.auto_refill.run()
+                #self.auto_refill.run()
                 # self.fan.run()
-                # self.feeding.run()
+                self.feeding.run()
                 # self.ph.run()
                 time.sleep(10)
                 fail_counter = 0
