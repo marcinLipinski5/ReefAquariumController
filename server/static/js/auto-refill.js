@@ -14,7 +14,7 @@ class AutoRefill {
   }
 
   updateInterfaceFlowCalc() {
-    this.refill.flow.textContent = this.daily_refill_flow.toString().padStart(2, "0")
+    this.refill.flow.textContent = this.daily_refill_flow.toFixed(2).toString().padStart(2, "0")
   }
 
   updateInterfaceAlarm() {
