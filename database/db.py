@@ -122,3 +122,6 @@ class Database:
         values = [value + "'" for value in values]
         statement = f'INSERT INTO {table} ({", ".join(columns)}) VALUES ({", ".join(values)})'
         self.__add_to_que(statement)
+
+if __name__ == "__main__":
+    Database(":memory:")
