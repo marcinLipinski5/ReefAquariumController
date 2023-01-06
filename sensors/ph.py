@@ -39,6 +39,8 @@ class Ph:
         if process == 'processing':
             logging.info(f"Processing calibration data for pH={self.database.select(table='ph', column='calibration_ph')} sensor.")
             self.__process_calibration_samples()
+            self.database.update(table='ph', column='process', value='calculating')
+        elif process == 'calculating':
             self.__update_algorithm()
             self.database.update(table='ph', column='process', value='work')
         elif process == 'work':
@@ -88,7 +90,7 @@ class Ph:
 
     def __check_if_calibration_ended(self):
         duration = time.time() - self.database.select(table='ph', column='calibration_time_start')
-        if duration >= 180 * 1000:
+        if duration >= 180:
             logging.debug('pH calibration ended')
             self.database.update(table='ph', column='process', value='processing')
             self.database.update(table='ph', column='calibration_time_start', value=0.0)
