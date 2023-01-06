@@ -16,13 +16,13 @@ class Controller:
 
     def run(self):
         logging.debug("Start main method for AUTO REFILL")
+        self.__check_alarm_conditions()
         if self.__get_calibration_status():
             self.__calibration()
             return
-        if self.__check_limit_switch_state():
+        elif self.__check_limit_switch_state():
             return
-        self.__check_alarm_conditions()
-        if self.__should_pump_be_active():
+        elif self.__should_pump_be_active():
             logging.info("Running auto refill pump")
             try:
                 self.database.update(table='auto_refill', column='refill_time_start', value=time.time())
@@ -36,6 +36,8 @@ class Controller:
                 self.database.update(table='auto_refill', column='water_pump_refill_relay_state', value=False, boolean_needed=True)
                 self.database.update(table='auto_refill', column='refill_time_start', value=0.0)
                 logging.info("Auto refill pump successfuly stopped")
+        else:
+            logging.debug('None of auto refill condition was fulfilled')
 
     def __run_flow_counter(self):
         logging.debug("Running flow counter")
