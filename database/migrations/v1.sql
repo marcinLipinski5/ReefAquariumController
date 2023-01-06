@@ -19,7 +19,8 @@ CREATE TABLE auto_refill(
     pulses_per_ml REAL NOT NULL,
     calibration_flow REAL NOT NULL,
     calibration_pulses INTEGER NOT NULL,
-    calibration_stage VARCHAR NOT NULL);
+    calibration_stage VARCHAR NOT NULL,
+    first_run INTEGER NOT NULL);
 
 INSERT INTO auto_refill (
     id,
@@ -38,8 +39,9 @@ INSERT INTO auto_refill (
     pulses_per_ml,
     calibration_flow,
     calibration_pulses,
-    calibration_stage)
-    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0, 0, 4.4682539, 100, 500, 'done');
+    calibration_stage,
+    first_run)
+    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0, 0, 4.4682539, 100, 500, 'done', 1);
 
 CREATE TABLE temperature (
     id INTEGER PRIMARY KEY,

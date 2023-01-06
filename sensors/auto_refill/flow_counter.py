@@ -14,7 +14,7 @@ class FlowCounter:
         self.database = database
         self.gpio = gpio_setup
         self.pulse_counter = 0
-        self.first_run = True
+        self.first_run = self.database.select(table='auto_refill', column='first_run', boolean_needed=True)
 
     def get_calibrations_data(self):
         self.__count()
@@ -25,7 +25,7 @@ class FlowCounter:
         if self.first_run:
             self.__reset_counter()
             self.__count()
-            self.first_run = False
+            self.database.update(table='auto_refill', column='first_run', value=False, boolean_needed=True)
         elif self.__should_daily_refill_counter_be_reset():
             self.__reset_counter()
         else:
