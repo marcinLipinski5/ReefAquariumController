@@ -16,10 +16,10 @@ class Controller:
 
     def run(self):
         logging.debug("Start main method for AUTO REFILL")
-        if self.__check_limit_switch_state():
-            return
         if self.__get_calibration_status():
             self.__calibration()
+            return
+        if self.__check_limit_switch_state():
             return
         self.__check_alarm_conditions()
         if self.__should_pump_be_active():
