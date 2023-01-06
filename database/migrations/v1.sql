@@ -61,7 +61,7 @@ CREATE TABLE feeding (
     water_pump_state INTEGER NOT NULL
 );
 
-INSERT INTO feeding (id, is_feeding_time, start_time, feeding_duration, water_pump_state) VALUES (1, 0, 0, 600, 0);
+INSERT INTO feeding (id, is_feeding_time, start_time, feeding_duration, water_pump_state) VALUES (1, 0, 0, 600, 1);
 
 CREATE TABLE fan (
     id INTEGER PRIMARY KEY,
