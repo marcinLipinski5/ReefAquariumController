@@ -34,7 +34,7 @@ class Feeding:
     def __is_feeding_time(self):
         water_pump_state = self.database.select(table='feeding', column='water_pump_state', boolean_needed=True)
         is_feeding_time = self.database.select(table='feeding', column='is_feeding_time', boolean_needed=True)
-        return is_feeding_time is True and water_pump_state is True
+        return is_feeding_time is True and water_pump_state is False
 
     def __should_start_action_be_executed(self) -> bool:
         start_time = self.database.select(table='feeding', column='start_time')

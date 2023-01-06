@@ -17,7 +17,7 @@ class GPIOSetup:
         # # fan section
         self.pwm = IOPins.FAN_PWM
         GPIO.setup(self.pwm.value, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pwm.value, 100_000)
+        self.pwm = GPIO.PWM(self.pwm.value, 10)
         self.pwm.start(100)
 
         # auto refill section
