@@ -105,7 +105,7 @@ class Controller:
             self.database.update(table='auto_refill', column='pulses_per_ml', value=pulses_per_ml)
             self.database.update(table='auto_refill', column='calibration_stage', value="done")
             self.database.update(table='auto_refill', column='calibration', value=False, boolean_needed=True)
-            return True
+            return False
         return False
 
     def __calibration(self):
