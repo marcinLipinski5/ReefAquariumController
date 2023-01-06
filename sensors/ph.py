@@ -81,9 +81,9 @@ class Ph:
         for _ in range(0, 10):
             sample = self.channel.voltage
             samples.append(sample)
-            logging.debug(f'pH sample: {sample}')
         logging.debug(f'pH samples: {samples}')
-        samples = samples.sort()[2:-2]
+        samples.sort()
+        samples = samples[2:-2]
         return statistics.mean(samples)
 
     def __check_if_calibration_ended(self):
