@@ -79,13 +79,17 @@ class Ph:
     def __get_voltage(self):
         samples = []
         for _ in range(0, 10):
-            samples.append(self.channel.voltage)
+            sample = self.channel.voltage
+            samples.append(sample)
+            logging.debug(f'pH sample: {sample}')
+        logging.debug(f'pH samples: {samples}')
         samples = samples.sort()[2:-2]
         return statistics.mean(samples)
 
     def __check_if_calibration_ended(self):
         duration = time.time() - self.database.select(table='ph', column='calibration_time_start')
         if duration >= 180 * 1000:
+            logging.debug('pH calibration ended')
             self.database.update(table='ph', column='process', value='processing')
             self.database.update(table='ph', column='calibration_time_start', value=0.0)
 
@@ -97,6 +101,7 @@ class Ph:
         self.calibration_samples = []
         ph = self.database.select(table='ph', column='calibration_ph')
         self.database.update(table='ph', column=f'calibration_voltage_{ph}', value=voltage)
+        logging.debug(f'pH= {ph} voltage: {voltage}')
 
     def __check_alarm_condition(self):
         if self.ph >= self.database.select(table='ph', column='alarm_level') and not self.alarm:
