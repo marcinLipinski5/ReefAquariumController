@@ -7,7 +7,7 @@ from sensors.auto_refill.controller import Controller as AutoRefillController
 from sensors.temperature import Temperature as TemperatureController
 from sensors.fan import Fan as FanController
 from sensors.feeding import Feeding as FeedingController
-# from sensors.ph import Ph as PhController
+from sensors.ph import Ph as PhController
 from watchdog.main import Main as Watchdog
 from server.main import Server
 from database.db import Database
@@ -33,7 +33,7 @@ class ReefAquariumController:
         self.temperature = TemperatureController(self.database, gpio)
         self.fan = FanController(self.database, gpio)
         self.feeding = FeedingController(self.database, gpio)
-        # self.ph = PhController(self.database)
+        self.ph = PhController(self.database)
         self.watchdog = Watchdog(self.database, gpio)
         self.server = Server(self.database)
         #
@@ -75,8 +75,8 @@ class ReefAquariumController:
                 # self.temperature.run()
                 #self.auto_refill.run()
                 # self.fan.run()
-                self.feeding.run()
-                # self.ph.run()
+                # self.feeding.run()
+                self.ph.run()
                 time.sleep(10)
                 fail_counter = 0
             except:

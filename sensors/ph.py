@@ -75,7 +75,7 @@ class Ph:
     @staticmethod
     def __solve_equations(ph_7_0, ph_4_0, voltage_ph_7_0, voltage_ph_4_0):
         m = (ph_7_0 - ph_4_0) / (voltage_ph_7_0 - voltage_ph_4_0)
-        b = ph_4_0 / m * voltage_ph_4_0
+        b = ph_4_0 - voltage_ph_4_0 * m
         return {'m': m, 'b': b}
 
     def __get_voltage(self):
