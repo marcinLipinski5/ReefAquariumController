@@ -7,10 +7,10 @@ import statistics
 import time
 from datetime import datetime
 
-import Adafruit_ADS1x15.ads1115 as ADS
+import adafruit_ads1x15.ads1115 as ADS
 import board
 import busio
-from Adafruit_ADS1x15.analog_in import AnalogIn
+from adafruit_ads1x15.analog_in import AnalogIn
 
 from database.db import Database
 
