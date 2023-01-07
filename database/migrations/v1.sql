@@ -41,7 +41,7 @@ INSERT INTO auto_refill (
     calibration_pulses,
     calibration_stage,
     first_run)
-    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0, 0, 4.4682539, 24.6, 500, 'done', 1);
+    VALUES (1, 0, 0, 1000, '2022-12-10', 0.0, 10, 0, 0, 0, 0, 0, 0, 2.54994, 23.53, 60, 'done', 1);
 
 CREATE TABLE temperature (
     id INTEGER PRIMARY KEY,
