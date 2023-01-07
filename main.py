@@ -19,7 +19,7 @@ class ReefAquariumController:
 
     def __init__(self):
         logging.basicConfig(
-            level=logging.DEBUG,
+            level=logging.INFO,
             format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s",
             datefmt='%Y-%m-%d %H:%M:%S',
             handlers=[
@@ -46,20 +46,20 @@ class ReefAquariumController:
         try:
             self.database_thread.start()
             self.sensors_thread.start()
-            # self.watchdog_thread.start()
+            self.watchdog_thread.start()
             self.server_thread.start()
             while True:
-                # active_threads = []
-                # for thread in threading.enumerate():
-                #     active_threads.append(thread.name)
-                # try:
-                #     assert 'database_thread' in  active_threads
-                #     assert 'sensors_thread' in active_threads
-                #     assert 'watchdog_thread' in active_threads
-                #     assert 'server_thread' in active_threads
-                # except AssertionError:
-                #     logging.error(f"Some threads are missing in {threading.enumerate()}. Restarting...")
-                #     break
+                active_threads = []
+                for thread in threading.enumerate():
+                    active_threads.append(thread.name)
+                try:
+                    assert 'database_thread' in  active_threads
+                    assert 'sensors_thread' in active_threads
+                    assert 'watchdog_thread' in active_threads
+                    assert 'server_thread' in active_threads
+                except AssertionError:
+                    logging.error(f"Some threads are missing in {threading.enumerate()}. Restarting...")
+                    break
                 time.sleep(1)
         except:
             logging.error("Critical error. Closing down application")
@@ -72,10 +72,10 @@ class ReefAquariumController:
         while fail_counter < 10:
             try:
                 logging.debug('############ SENSOR ITERATION ############')
-                # self.temperature.run()
-                #self.auto_refill.run()
-                # self.fan.run()
-                # self.feeding.run()
+                self.temperature.run()
+                self.auto_refill.run()
+                self.fan.run()
+                self.feeding.run()
                 self.ph.run()
                 time.sleep(10)
                 fail_counter = 0

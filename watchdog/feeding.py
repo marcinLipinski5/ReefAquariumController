@@ -27,8 +27,8 @@ class FeedingWatchdog:
             return True
 
     def __reset_pump_relay(self):
-        self.gpio.set(self.gpio.water_pump_relay.value, 0)  # TODO check relays NO/NC status
-        self.database.update(table="feeding", column="water_pump_state", value=False, boolean_needed=True)
+        self.gpio.set(self.gpio.water_pump_relay.value, 0)
+        self.database.update(table="feeding", column="water_pump_state", value=True, boolean_needed=True)
         self.database.update(table="feeding", column="start_time", value=0)
         self.database.update(table="feeding", column="is_feeding_time", value=False, boolean_needed=True)
 
