@@ -12,7 +12,6 @@ class AutoRefillWatchdog:
     def __init__(self, database: Database, gpio: GPIOSetup):
         self.database = database
         self.gpio = gpio
-        self.water_pump_refill_relay = IOPins.WATER_PUMP_REFILL_RELAY.value
         self.max_refill_time = self.max_refill_max_time_in_seconds()
 
     def run(self):
@@ -29,7 +28,7 @@ class AutoRefillWatchdog:
             return int(now-float(start_time)) > (int(self.max_refill_time) + 3)  # plus 3 seconds as protection against random delays
 
     def __reset_pump_relay(self):
-        self.gpio.set(self.water_pump_refill_relay.value, 0)
+        self.gpio.set(self.gpio.water_pump_refill_relay.value, 0)
         self.database.update(table='auto_refill', column='refill_time_start', value=0)
         self.database.update(table='auto_refill', column='water_pump_refill_relay_state', value=False, boolean_needed=True)
 
