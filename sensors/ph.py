@@ -29,6 +29,7 @@ class Ph:
 
         self.calibration_samples = []
         self.alarm = False
+        self.statistic_samples = []
 
     def run(self):
         process = self.database.select(table='ph', column='process')
@@ -46,7 +47,9 @@ class Ph:
         elif process == 'work':
             logging.debug("Starting standard procedure for pH sensor.")
             ph = self.__get_ph_value()
-            self.__update_data(ph)
+            statistic_mean = self.__calculate_statistic_mean(ph)
+            if statistic_mean is not None:
+                self.__update_data(statistic_mean)
             self.__check_alarm_condition()
 
     def __update_data(self, ph: float):
@@ -112,3 +115,16 @@ class Ph:
         elif self.ph < self.database.select(table='ph', column='alarm_level') and self.alarm:
             self.database.update(table='ph', column='alarm', value=False, boolean_needed=True)
             self.alarm = False
+
+    def __calculate_statistic_mean(self, ph: float):
+        self.statistic_samples.append(ph)
+        if len(self.statistic_samples) >= 6:
+            self.statistic_samples.sort()
+            self.statistic_samples = self.statistic_samples[2:-2]
+            result = statistics.mean(self.statistic_samples)
+            self.statistic_samples = []
+            return result
+        return None
+
+
+
