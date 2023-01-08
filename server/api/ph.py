@@ -20,7 +20,7 @@ def ph_api(database: Database):
     @ph.route("/settings", methods=["GET", "POST"])
     def settings():
         if request.method == "POST":
-            database.update(table='ph', column='alarm_level', value=int(request.form.get('alarm_level')))
+            database.update(table='ph', column='alarm_level', value=float(request.form.get('alarm_level')))
             return redirect('/')
         elif request.method == "GET":
             data = {'alarm_level': database.select(table='ph', column='alarm_level'),

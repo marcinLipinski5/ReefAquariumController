@@ -111,7 +111,7 @@ INSERT INTO ph (id,
                 calibration_ph,
                 calibration_voltage_4_0,
                 calibration_voltage_7_0)
-                VALUES (1, -10.048588807757058, 38.53233490483472, 7.0, 'work', 0, 8.0, 0.0, '7_0', 3.4355406082678033, 3.1188567540287258);
+                VALUES (1, -10.048588807757058, 36.939968, 7.0, 'work', 0, 8.0, 0.0, '7_0', 3.4355406082678033, 3.1188567540287258);
 
 CREATE TABLE ph_history (
     id INTEGER PRIMARY KEY,
