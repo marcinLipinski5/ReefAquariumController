@@ -17,6 +17,7 @@ class Controller:
     def run(self):
         logging.debug("Start main method for AUTO REFILL")
         self.__check_alarm_conditions()
+        FlowCounter(self.database, self.gpio).check_flow_reset_condition()
         if self.__get_calibration_status():
             self.__calibration()
             return
@@ -124,3 +125,4 @@ class Controller:
 
     def __get_flow_counter_calibration_data(self):
         return FlowCounter(self.database, self.gpio).get_calibrations_data()
+
