@@ -39,7 +39,7 @@ class Server:
 
     def run(self):
         self.prepare()
-        self.app.run(port=5001)
+        self.app.run(port=5000)
 
     def get_test_instance(self):
         self.prepare()
