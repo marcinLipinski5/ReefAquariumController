@@ -54,7 +54,7 @@ class ReefAquariumController:
                 for thread in threading.enumerate():
                     active_threads.append(thread.name)
                 try:
-                    assert 'database_thread' in  active_threads
+                    assert 'database_thread' in active_threads
                     assert 'sensors_thread' in active_threads
                     assert 'watchdog_thread' in active_threads
                     assert 'server_thread' in active_threads
@@ -100,7 +100,7 @@ class ReefAquariumController:
     def update_database(self):
         while True:
             self.database.execute_que()
-            time.sleep(1)
+            time.sleep(0.5)
 
     def run_server(self):
         logging.info("Starting server thread")

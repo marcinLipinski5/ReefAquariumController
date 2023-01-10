@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+   <body>
+   <div class="flex-container">
+        <div class="general__block general__text__settings">
+            <table>
+                 <tr>
+                     <th>Date</th>
+                     <th>Note</th>
+                 </tr>
+                 {% for note in note_list %}
+                 <tr>
+                     <th>{{ note.date }}</th>
+                     <th>{{ note.content }}</th>
+                 </tr>
+                 {% endfor %}
+             </table>
+        </div>
+       <br>
+        <div class="general__block">
+            <form action="/notes/add" method="post">
+                <label class="general__block">
+                    <input class="settings__block general__text__settings" type="text" name="note" id="note"/>
+                </label>
+                <label class="general__block">
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />
+                </label>
+            </form>
+        </div>
+   </div>
+   </body>
+</html>

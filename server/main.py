@@ -9,6 +9,7 @@ from server.api.fan import fan_api
 from server.api.feeding import feeding_api
 from server.api.temperature import temperature_api
 from server.api.ph import ph_api
+from server.api.notes import notes_api
 
 
 class Server:
@@ -33,11 +34,12 @@ class Server:
         self.app.register_blueprint(temperature_api(self.__database), url_prefix="/temperature")
         self.app.register_blueprint(fan_api(self.__database), url_prefix='/fan')
         self.app.register_blueprint(ph_api(self.__database), url_prefix="/ph")
+        self.app.register_blueprint(notes_api(self.__database), url_prefix="/notes")
         logging.info('Server started!')
 
     def run(self):
         self.prepare()
-        self.app.run(port=5000)
+        self.app.run(port=5001)
 
     def get_test_instance(self):
         self.prepare()
