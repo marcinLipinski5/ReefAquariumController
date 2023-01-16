@@ -92,6 +92,7 @@ body {
   margin-bottom: 0px;
   font-size: 150%;
   font-weight: bold;
+  margin: 10px;
 }
 
 .ph__text__settings {
@@ -183,4 +184,14 @@ th, td {
   border-radius: 10px;
   padding: 15px;
   overflow-wrap: anywhere;
+}
+
+.form__btn {
+  aspect-ratio : 1 / 1;
+  width: 100%;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  background: #8eef38;
+  cursor: pointer;
 }

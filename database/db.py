@@ -107,12 +107,14 @@ class Database:
             return True if fetch == 1 else False
         return fetch
 
-    def update(self, table: str, column: str, value, boolean_needed: bool = False):
+    def update(self, table: str, column: str, value, boolean_needed: bool = False, where: str = None):
         if boolean_needed:
             value = 1 if value else 0
         if type(value) is str:
             value = "'" + value + "'"
         statement = f"UPDATE {table} SET {column} = {value}"
+        if where:
+            statement += f' WHERE {where}'
         self.__add_to_que(statement)
 
     def insert(self, table: str, columns: List[str], values: List[str]):
@@ -122,6 +124,11 @@ class Database:
         values = [value + "'" for value in values]
         statement = f'INSERT INTO {table} ({", ".join(columns)}) VALUES ({", ".join(values)})'
         self.__add_to_que(statement)
+
+    def delete(self, table: str, where: str):
+        statement = f"DELETE FROM {table} WHERE {where}"
+        self.__add_to_que(statement)
+
 
 if __name__ == "__main__":
     Database(":memory:")

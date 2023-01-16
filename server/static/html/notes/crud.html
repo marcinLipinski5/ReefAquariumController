@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+   <body>
+   <div class="flex-container">
+        <div class="general__block">
+            <form action="/notes/update" method="post">
+                <label class="general__block">
+                    <input class="settings__block general__text__settings" type="text" name="content" id="content" value="{{ note.content }}" size="40"/>
+                    <input type="hidden" name="id" id="id" value="{{ note.id }}">
+                </label>
+                <label class="general__block">
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Update" />
+                    <input type="submit" formaction="/notes/delete?id={{ note.id }}" class="settings__block general__text__settings alarm__btn--active" value="Delete" />
+                </label>
+            </form>
+        </div>
+    </div>
+   </body>
+</html>

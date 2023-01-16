@@ -10,13 +10,19 @@
         <div class="general__block general__text__settings">
             <table>
                  <tr>
-                     <th>Date</th>
-                     <th>Note</th>
+                    <th></th>
+                    <th>Date</th>
+                    <th>Note</th>
                  </tr>
                  {% for note in note_list %}
                  <tr>
-                     <th>{{ note.date }}</th>
-                     <th>{{ note.content }}</th>
+                    <th>
+                        <button type="button" class="form__btn">
+                            <a class="material-icons" href="/notes/update?id={{note.id}}">manage_history</a>
+                        </button>
+                    </th>
+                    <th>{{ note.date }}</th>
+                    <th>{{ note.content }}</th>
                  </tr>
                  {% endfor %}
              </table>
@@ -25,7 +31,7 @@
         <div class="general__block">
             <form action="/notes/add" method="post">
                 <label class="general__block">
-                    <input class="settings__block general__text__settings" type="text" name="note" id="note"/>
+                    <input class="settings__block general__text__settings" type="text" name="note" id="note" size="40"/>
                 </label>
                 <label class="general__block">
                     <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />
