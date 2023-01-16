@@ -10,7 +10,7 @@ def notes_api(database: Database):
 
     @notes.route("/", methods=["GET", "DELETE"])
     def get():
-        note_list = database.select(table='notes', single=False)
+        note_list = database.select(table='notes', single=False, append=' ORDER BY id DESC')
         answer = []
         for note in note_list:
             answer.append({'id': note[0], 'date': note[1], 'content': note[2]})
