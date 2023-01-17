@@ -195,3 +195,22 @@ th, td {
   background: #8eef38;
   cursor: pointer;
 }
+
+.alert__text {
+  margin-top: 40px;
+  margin-bottom: 5px;
+  font-size: 30px;
+  font-weight: normal;
+  text-align: left;
+  flex: 70%;
+}
+
+.alert__button {
+  font-size: 30px;
+  border: none;
+  color: white;
+  padding: 14px 28px;
+  cursor: pointer;
+  background-color: #f44336;
+}
+

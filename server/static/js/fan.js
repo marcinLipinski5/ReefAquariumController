@@ -52,7 +52,7 @@ class Fan {
     <button type="button" class="general__btn settings__btn__inactive">
       <a class="material-icons">query_stats</a>
     </button>
-  </div>
+    </div>
     <div class="general__button__block">
       <button type="button" class="general__btn settings__btn">
         <a class="material-icons" href="html/settings/fan.html">settings</a>
