@@ -109,7 +109,7 @@ class Database:
             return True if fetch == 1 else False
         return fetch
 
-    def update(self, table: str, column: str, value, boolean_needed: bool = False, where: str = None):
+    def update(self, table: str, column: str, value, boolean_needed: bool = False, where: str = None, force_que_execution=False):
         if boolean_needed:
             value = 1 if value else 0
         if type(value) is str:
@@ -117,20 +117,26 @@ class Database:
         statement = f"UPDATE {table} SET {column} = {value}"
         if where:
             statement += f' WHERE {where}'
+        print(statement)
         self.__add_to_que(statement)
+        if force_que_execution:
+            self.execute_que()
 
-    def insert(self, table: str, columns: List[str], values: List[str]):
+    def insert(self, table: str, columns: List[str], values: List[str], force_que_execution=False):
         assert len(columns) == len(values)
         values = map(str, values)
         values = ["'" + value for value in values]
         values = [value + "'" for value in values]
         statement = f'INSERT INTO {table} ({", ".join(columns)}) VALUES ({", ".join(values)})'
         self.__add_to_que(statement)
+        if force_que_execution:
+            self.execute_que()
 
-    def delete(self, table: str, where: str):
+    def delete(self, table: str, where: str, force_que_execution=False):
         statement = f"DELETE FROM {table} WHERE {where}"
         self.__add_to_que(statement)
-
+        if force_que_execution:
+            self.execute_que()
 
 if __name__ == "__main__":
     Database(":memory:")

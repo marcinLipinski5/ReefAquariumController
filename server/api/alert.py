@@ -16,4 +16,14 @@ def alert_api(database: Database):
             answer[alert[1]] = {'id': alert[0], 'type': alert[1], 'date': alert[2], 'description': alert[3], 'action_endpoint': alert[5], 'button_text': alert[6]}
         return jsonify(answer), 200
 
+    @alert.route("/clear", methods=["GET"])
+    def clear():
+        database.update(table='alert',
+                        column='status',
+                        value=False,
+                        boolean_needed=True,
+                        where=f'type="{request.args.get("type")}"',
+                        force_que_execution=True)
+        return redirect('/')
+
     return alert

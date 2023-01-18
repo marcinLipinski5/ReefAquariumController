@@ -1,5 +1,6 @@
 import time
 import logging
+from datetime import datetime
 
 from pins.gpio_setup import GPIOSetup
 from database.db import Database
@@ -17,6 +18,7 @@ class AutoRefillWatchdog:
     def run(self):
         if self.__is_work_time_exceeded():
             self.__reset_pump_relay()
+            self.__set_alert()
             logging.warning("WATCHDOG: Auto refill working time exceeded! Resetting refill pump relay to open state.")
 
     def __is_work_time_exceeded(self) -> bool:
@@ -34,3 +36,14 @@ class AutoRefillWatchdog:
 
     def max_refill_max_time_in_seconds(self):
         return self.database.select(table='auto_refill', column='refill_max_time_in_seconds')
+
+    def __set_alert(self):
+        self.database.update(table='alert',
+                             column='status',
+                             value=True,
+                             boolean_needed=True,
+                             where='type="auto_refill_watchdog_alert"')
+        self.database.update(table='alert',
+                             column='date_time',
+                             value=datetime.now().strftime('%d-%m-%y %H:%M'),
+                             where='type="auto_refill_watchdog_alert"')

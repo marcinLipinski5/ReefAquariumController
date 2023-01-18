@@ -19,6 +19,14 @@
                         <span class="settings__block general__text__settings">Max interval [s]</span>                
                         <input class="settings__block general__text__settings" type="text" name="refill_max_time_in_seconds" id="refill_max_time_in_seconds"/><br>
                     </div>
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Refill tank capacity [ml]</span>                
+                        <input class="settings__block general__text__settings" type="text" name="refill_tank_capacity" id="refill_tank_capacity"/><br>
+                    </div>
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Refill tank water left [ml]</span>                
+                        <input class="settings__block general__text__settings" type="text" name="refill_tank_water_left" id="refill_tank_water_left"/><br>
+                    </div>
                 </label>
                 <label class="general__block">
                     <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save settings" />                                                     
@@ -60,6 +68,8 @@
         .then((json) => { 
             document.getElementById("max_daily_refill_flow").value =  json.max_daily_refill_flow;
             document.getElementById("refill_max_time_in_seconds").value =  json.refill_max_time_in_seconds;
+            document.getElementById("refill_tank_capacity").value =  json.refill_tank_capacity;
+            document.getElementById("refill_tank_water_left").value =  json.refill_tank_water_left;
             document.getElementById("calibration_flow").value =  json.calibration_flow;
          });
          function change_button_text() {

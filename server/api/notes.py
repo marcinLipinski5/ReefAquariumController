@@ -20,8 +20,7 @@ def notes_api(database: Database):
     def add():
         note = str(request.form.get('note'))
         date = datetime.now().strftime('%d-%m-%y %H:%M')
-        database.insert(table='notes', columns=['date_time', 'note'], values=[date, note])
-        time.sleep(0.5)
+        database.insert(table='notes', columns=['date_time', 'note'], values=[date, note], force_que_execution=True)
         return redirect('/notes')
 
     @notes.route("/update", methods=["POST", "GET"])
@@ -32,14 +31,12 @@ def notes_api(database: Database):
             return render_template("html/notes/crud.html", note=note)
         if request.method == 'POST':
             new_content = str(request.form.get('content'))
-            database.update(table='notes', column='note', value=new_content, where=f'id = {int(request.form.get("id"))}')
-            time.sleep(0.5)
+            database.update(table='notes', column='note', value=new_content, where=f'id = {int(request.form.get("id"))}', force_que_execution=True)
             return redirect('/notes')
 
     @notes.route("/delete", methods=["POST"])
     def delete():
-        database.delete(table='notes', where=f'id = {request.args.get("id")}')
-        time.sleep(0.5)
+        database.delete(table='notes', where=f'id = {request.args.get("id")}', force_que_execution=True)
         return redirect('/notes')
 
     return notes

@@ -10,17 +10,16 @@ class Alert {
     this.getAlert()
   }
 
-  updateInterface(date, description, action_endpoint, button_text) {
+  updateInterface(date, description, action_endpoint, button_text, type) {
     console.log(description)
     this.alertElement.alert_window.innerHTML += 
-      '<div class="general__block"'
-      + '<p class="label__text__block">Alert</p>'
-      + '<p class="alert__text control__text__block">'
-      + '[' + date + '] ' 
-      + description 
+      `<div class="general__block"
+        <p class="label__text__block">Alert</p>
+        <p class="alert__text control__text__block">
+        [` + date + `] ` + description 
       + `<div class="general__button__block">
           <button type="button" class="alert__button">
-          <a href="` + action_endpoint + `">` + button_text +`</a>
+          <a href="` + action_endpoint + `?type=` + type +`">` + button_text +`</a>
 			    </button>
         </div>`
       +'</p>'
@@ -43,7 +42,11 @@ class Alert {
     for (var key in json) {
       console.log(json[key])
       var object = json[key]
-      this.updateInterface(object.date, object.description, object.action_endpoint, object.button_text)
+      this.updateInterface(object.date,
+        object.description,
+        object.action_endpoint,
+        object.button_text,
+        object.type)
     }
   }
 

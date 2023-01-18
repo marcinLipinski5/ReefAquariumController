@@ -1,7 +1,7 @@
 
 import logging
 import time
-from datetime import date
+from datetime import date, datetime
 
 from database.db import Database
 from pins.gpio_setup import GPIOSetup
@@ -34,8 +34,16 @@ class FlowCounter:
         time.sleep(self.__get_refill_max_time_in_seconds())
         self.gpio.remove_event_detect(self.gpio.water_pump_refill_flow_counter.value)
         current_flow = self.database.select(table='auto_refill', column='daily_refill_flow')
-        self.database.update(table='auto_refill', column='daily_refill_flow',
+        self.database.update(table='auto_refill',
+                             column='daily_refill_flow',
                              value=(self.__get_flow_in_milliliters() + current_flow))
+        self.database.update(table='auto_refill',
+                             column='refill_tank_water_left',
+                             value=(self.database.select(
+                                 table='auto_refill',
+                                 column='refill_tank_water_left') - self.__get_flow_in_milliliters()))
+        self.__set_low_capacity_alarm()
+        self.__set_flow_counter_sensor_error()
         logging.debug(f"COUNTER OUT: {self.pulse_counter}")
 
     def __get_flow_in_milliliters(self) -> float:
@@ -67,6 +75,31 @@ class FlowCounter:
     def __get_refill_max_time_in_seconds(self):
         return self.database.select(table='auto_refill', column='refill_max_time_in_seconds')
 
+    def __set_low_capacity_alarm(self):
+        twenty_percent_capacity = self.database.select(table="auto_refill", column='refill_tank_capacity') * 0.2
+        if self.database.select(table='auto_refill', column='refill_tank_water_left') <= twenty_percent_capacity:
+            self.database.update(table='alert',
+                                 column='status',
+                                 value=True,
+                                 boolean_needed=True,
+                                 where='type="auto_refill_tank_empty_alert"')
+            self.database.update(table='alert',
+                                 column='date_time',
+                                 value=datetime.now().strftime('%d-%m-%y %H:%M'),
+                                 where='type="auto_refill_tank_empty_alert"')
+
     def check_flow_reset_condition(self):
         if self.__should_daily_refill_counter_be_reset():
             self.__reset_counter()
+
+    def __set_flow_counter_sensor_error(self):
+        if self.pulse_counter == 0:
+            self.database.update(table='alert',
+                                 column='status',
+                                 value=True,
+                                 boolean_needed=True,
+                                 where='type="flow_sensor_error"')
+            self.database.update(table='alert',
+                                 column='date_time',
+                                 value=datetime.now().strftime('%d-%m-%y %H:%M'),
+                                 where='type="flow_sensor_error"')
