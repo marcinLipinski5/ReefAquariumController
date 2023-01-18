@@ -117,7 +117,6 @@ class Database:
         statement = f"UPDATE {table} SET {column} = {value}"
         if where:
             statement += f' WHERE {where}'
-        print(statement)
         self.__add_to_que(statement)
         if force_que_execution:
             self.execute_que()
