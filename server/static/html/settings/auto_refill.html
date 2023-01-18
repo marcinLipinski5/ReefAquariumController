@@ -69,7 +69,7 @@
             document.getElementById("max_daily_refill_flow").value =  json.max_daily_refill_flow;
             document.getElementById("refill_max_time_in_seconds").value =  json.refill_max_time_in_seconds;
             document.getElementById("refill_tank_capacity").value =  json.refill_tank_capacity;
-            document.getElementById("refill_tank_water_left").value =  json.refill_tank_water_left;
+            document.getElementById("refill_tank_water_left").value =  json.refill_tank_water_left.toFixed(0).toString();
             document.getElementById("calibration_flow").value =  json.calibration_flow;
          });
          function change_button_text() {

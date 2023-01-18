@@ -8,7 +8,7 @@ CREATE TABLE alert(
     button_text TEXT NOT NULL
 );
 
-INSERT INTO alert (type, date_time, description, status, action_endpoint, button_text) VALUES ('flow_sensor_error', '17-01-23 15:00', 'None flow was captured when auto refill pump was active. Check auto refill connections.', 0, '/alert/clear', 'close');
+INSERT INTO alert (type, date_time, description, status, action_endpoint, button_text) VALUES ('flow_sensor_error', '17-01-23 15:00', 'No flow was captured when auto refill pump was active. Check auto refill connections.', 0, '/alert/clear', 'close');
 INSERT INTO alert (type, date_time, description, status, action_endpoint, button_text) VALUES ('auto_refill_tank_empty_alert', '17-01-23 16:00', 'Less than 20% water left in auto refill container.', 0, '/auto_refill/reset_refill_tank_state', 'reset');
 INSERT INTO alert (type, date_time, description, status, action_endpoint, button_text) VALUES ('auto_refill_watchdog_alert', '17-01-23 17:00', 'Watchdog for auto refill was activated. It is recommended to check all connections and reset application.', 0, '/alert/clear', 'close');
 
