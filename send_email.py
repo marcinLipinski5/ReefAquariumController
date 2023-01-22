@@ -12,7 +12,7 @@ class SendEmail:
         self.body = body
 
         self.sender = 'reefaquariumcontroller@gmail.com'
-        self.password = os.getenv('GMAIL_API_KET')
+        self.password = os.getenv('GMAIL_API_KEY')
         self.receiver = 'marcin.lipinski5@gmail.com'
         if self.password is not None:
             self.send()
