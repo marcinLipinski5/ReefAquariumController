@@ -8,7 +8,6 @@ coverage
 tqdm
 pandas
 plotly
-board
 adafruit-blinka
 adafruit-circuitpython-ads1x15
 numpy

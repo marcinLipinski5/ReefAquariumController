@@ -23,7 +23,7 @@ from send_email import SendEmail
 class ReefAquariumController:
 
     def __init__(self):
-        load_dotenv()
+        load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
         logging.basicConfig(
             level=logging.INFO,
             format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s",
