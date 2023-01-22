@@ -5,6 +5,8 @@ import traceback
 import os
 import requests
 
+from dotenv import load_dotenv
+
 from sensors.auto_refill.controller import Controller as AutoRefillController
 from sensors.temperature import Temperature as TemperatureController
 from sensors.fan import Fan as FanController
@@ -21,6 +23,7 @@ from send_email import SendEmail
 class ReefAquariumController:
 
     def __init__(self):
+        load_dotenv()
         logging.basicConfig(
             level=logging.INFO,
             format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s",
