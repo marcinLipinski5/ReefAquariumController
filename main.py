@@ -2,6 +2,7 @@ import logging
 import threading
 import time
 import traceback
+import requests
 
 from sensors.auto_refill.controller import Controller as AutoRefillController
 from sensors.temperature import Temperature as TemperatureController
@@ -12,6 +13,7 @@ from watchdog.main import Main as Watchdog
 from server.main import Server
 from database.db import Database
 from pins.gpio_setup import GPIOSetup
+from send_email import SendEmail
 
 
 # noinspection PyArgumentList
@@ -45,6 +47,7 @@ class ReefAquariumController:
 
     def run(self):
         try:
+            self.get_ngrok()
             self.database_thread.start()
             self.sensors_thread.start()
             self.watchdog_thread.start()
@@ -111,15 +114,24 @@ class ReefAquariumController:
             logging.error("Unable to run server")
             raise
 
-
-def restart():
-    import sys
-    import os
-    os.execv(sys.executable, ['python '] + sys.argv)
+    @staticmethod
+    def get_ngrok():
+        counter = 10
+        while counter > 0:
+            try:
+                logging.info("Collecting new ngrok url.")
+                answer = requests.get("http://localhost:4040/api/tunnels")
+                assert answer.status_code == 200
+                url = answer.json()['tunnels'][0]['public_url']
+                logging.info(f"Ngrok url successfully collected. New url: {url}")
+                SendEmail(subject='Ngrok new url', body=f'Ngrok new url: {url}')
+                break
+            except AssertionError:
+                logging.warning(f'Unable to collect new ngrok url. The process will be repeated: {counter} times.')
+                time.sleep(2)
+                counter -= 1
 
 
 if __name__ == "__main__":
     ReefAquariumController().run()
-    time.sleep(5)
-    restart()
 

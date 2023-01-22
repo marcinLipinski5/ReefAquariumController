@@ -5,3 +5,4 @@ aquarium_log.log
 .coverage
 htmlcov
 database/database.sqlite
+README.md
