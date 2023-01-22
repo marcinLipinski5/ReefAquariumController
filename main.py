@@ -2,6 +2,7 @@ import logging
 import threading
 import time
 import traceback
+import os
 
 from sensors.auto_refill.controller import Controller as AutoRefillController
 from sensors.temperature import Temperature as TemperatureController
@@ -23,7 +24,7 @@ class ReefAquariumController:
             format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s",
             datefmt='%Y-%m-%d %H:%M:%S',
             handlers=[
-                logging.FileHandler("aquarium_log.log"),
+                logging.FileHandler(os.path.join(os.path.dirname(__file__), "aquarium_log.log")),
                 logging.StreamHandler()
             ]
         )
