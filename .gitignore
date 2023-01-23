@@ -6,3 +6,4 @@ aquarium_log.log
 htmlcov
 database/database.sqlite
 README.md
+.env
