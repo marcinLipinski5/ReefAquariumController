@@ -33,6 +33,6 @@ def temperature_api(database: Database):
         df = pd.DataFrame(historic_data, columns=['date', 'temperature [*C]'])
         fig = px.line(df, x='date', y='temperature [*C]', title='Temperature')
         graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return render_template('historic_plot.html', graphJSON=graph_json)
+        return render_template('html/plot.html', graphJSON=graph_json)
 
     return temperature

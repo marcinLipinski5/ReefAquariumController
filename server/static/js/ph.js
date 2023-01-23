@@ -63,7 +63,6 @@ class Ph {
   setPhStatus(json){
     this.alarm = json.alarm
     this.ph = json.ph
-    console.log(json.ph)
     this.updateInterfaceAlarm();
     this.updateInterfacePh();
   }

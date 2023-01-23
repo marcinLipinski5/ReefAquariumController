@@ -1,6 +1,7 @@
 import logging
+import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 from flask_cors import CORS
 from database.db import Database
 
@@ -25,7 +26,12 @@ class Server:
     @staticmethod
     @app.route('/', methods=["GET"])
     def index():
-        return render_template("index.html")
+        return render_template("html/index.html")
+
+    @staticmethod
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory('static/image', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
     def prepare(self):
         self.app.url_map.strict_slashes = False

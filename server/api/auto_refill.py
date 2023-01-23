@@ -59,7 +59,7 @@ def auto_refill_api(database: Database):
         df = pd.DataFrame(historic_data, columns=['date', 'flow [ml]'])
         fig = px.bar(df, x='date', y='flow [ml]', barmode='group', title='Daily flow')
         graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return render_template('historic_plot.html', graphJSON=graph_json)
+        return render_template('html/plot.html', graphJSON=graph_json)
 
     @auto_refill.route("/reset_refill_tank_state")
     def reset_refill_tank_state():

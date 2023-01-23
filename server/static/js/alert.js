@@ -11,7 +11,6 @@ class Alert {
   }
 
   updateInterface(date, description, action_endpoint, button_text, type) {
-    console.log(description)
     this.alertElement.alert_window.innerHTML += 
       `<div class="general__block"
         <p class="label__text__block">Alert</p>
@@ -40,7 +39,6 @@ class Alert {
 
   setAlert(json){
     for (var key in json) {
-      console.log(json[key])
       var object = json[key]
       this.updateInterface(object.date,
         object.description,

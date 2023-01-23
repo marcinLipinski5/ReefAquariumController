@@ -35,7 +35,7 @@ def ph_api(database: Database):
         df = pd.DataFrame(historic_data, columns=['date', 'pH'])
         fig = px.line(df, x='date', y='pH', title='pH')
         graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return render_template('historic_plot.html', graphJSON=graph_json)
+        return render_template('html/plot.html', graphJSON=graph_json)
 
     @ph.route("/calibration", methods=["POST"])
     def calibration_start():
