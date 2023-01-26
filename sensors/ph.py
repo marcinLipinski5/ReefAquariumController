@@ -30,6 +30,7 @@ class Ph:
         self.calibration_samples = []
         self.alarm = False
         self.statistic_samples = []
+        self.last_hour = datetime.now().strftime('%H')
 
     def run(self):
         process = self.database.select(table='ph', column='process')
@@ -53,8 +54,9 @@ class Ph:
             self.__check_alarm_condition()
 
     def __update_data(self, ph: float):
-        if round(abs(self.ph - ph), 3) >= 0.1:
+        if (round(abs(self.ph - ph), 3) >= 0.1) or (self.last_hour != datetime.now().strftime('%H')):
             self.ph = ph
+            self.last_hour = datetime.now().strftime('%H')
             self.database.update(table='ph', column='ph', value=ph)
             self.database.insert(table='ph_history', columns=['date_time', 'ph'], values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), ph])
 
@@ -118,9 +120,9 @@ class Ph:
 
     def __calculate_statistic_mean(self, ph: float):
         self.statistic_samples.append(ph)
-        if len(self.statistic_samples) >= 6:
+        if len(self.statistic_samples) >= 60: # 1 sample every 10s -> 60 samples = 10 minutes. Long calc period to avoid random peaks on plot.
             self.statistic_samples.sort()
-            self.statistic_samples = self.statistic_samples[2:-2]
+            self.statistic_samples = self.statistic_samples[20:-20]  # Get rid of max/min values
             result = statistics.mean(self.statistic_samples)
             self.statistic_samples = []
             return result

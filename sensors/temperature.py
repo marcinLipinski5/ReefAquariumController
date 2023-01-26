@@ -16,6 +16,7 @@ class Temperature:
         self.sensor = w1thermsensor.W1ThermSensor()
         self.gpio = gpio
         self.last_read = 0.00
+        self.last_hour = datetime.now().strftime('%H')
         self.alarm = False
 
     def run(self):
@@ -24,11 +25,14 @@ class Temperature:
         self.__save_temperature_to_db(temperature)
 
     def __save_temperature_to_db(self, temperature: float):
-        if round(abs(self.last_read - temperature), 2) >= 0.2:
+        if (round(abs(self.last_read - temperature), 2) >= 0.2) or (self.last_hour != datetime.now().strftime('%H')):
             logging.debug(f"Current temperature: {temperature}")
             self.last_read = temperature
+            self.last_hour = datetime.now().strftime('%H')
             self.database.update(table='temperature', column='temperature', value=temperature)
-            self.database.insert(table='temperature_history', columns=['date_time', 'temperature'], values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), temperature])
+            self.database.insert(table='temperature_history',
+                                 columns=['date_time', 'temperature'],
+                                 values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), temperature])
 
     def __check_alarm_conditions(self, temperature: float):
         max_temperature = self.database.select(table='temperature', column='alarm_level')
