@@ -48,12 +48,37 @@
                 </label>
             </form>
         </div>
+        <div class="general__block">
+            <form action="/ph/calibration/manual" method="post">
+                <p class="settings__label__block settings__label__text">pH manual calibration</p>
+                <div class="general__block">
+                    <p class="general__text__settings info__text__block">
+                        <br> Manual input for pH calculation algorithm:
+                        <br> pH = m * voltage + b
+                        <br> It can take up to 10 minutes to update pH value after save
+                    </p>
+                </div>
+                <label class="general__block">
+                    <span class="settings__block general__text__settings">m</span>
+                    <input class="settings__block general__text__settings" type="text" name="m_factor" id="m_factor"/>
+                </label>
+                <label class="general__block">
+                    <span class="settings__block general__text__settings">b</span>
+                    <input class="settings__block general__text__settings" type="text" name="b_factor" id="b_factor"/>
+                </label>
+                <label class="general__block">
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />
+                </label>
+            </form>
+        </div>
     </div>
     <script>
         fetch("/ph/settings")
         .then((response) => {return response.json();})
         .then((json) => { 
             document.getElementById("alarm_level").value =  json.alarm_level;
+            document.getElementById("m_factor").value =  json.m_factor;
+            document.getElementById("b_factor").value =  json.b_factor;
             if(json.process == "calibration"){
             console.log(json.process);
                 change_button_text();

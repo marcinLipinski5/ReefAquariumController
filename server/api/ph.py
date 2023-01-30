@@ -24,7 +24,9 @@ def ph_api(database: Database):
             return redirect('/')
         elif request.method == "GET":
             data = {'alarm_level': database.select(table='ph', column='alarm_level'),
-                    'process': database.select(table='ph', column='process')}
+                    'process': database.select(table='ph', column='process'),
+                    'm_factor': database.select(table='ph', column='m'),
+                    'b_factor': database.select(table='ph', column='b')}
             return jsonify(data), 200
         else:
             return Response(status=405)
@@ -43,5 +45,11 @@ def ph_api(database: Database):
         database.update(table='ph', column='calibration_time_start', value=time.time())
         database.update(table='ph', column='calibration_ph', value=str(request.form.get('ph')).replace(".", "_"))
         return '', 204
+
+    @ph.route("/calibration/manual", methods=["POST"])
+    def calibration_manual():
+        database.update(table='ph', column='m', value=float(request.form.get('m_factor')), force_que_execution=True)
+        database.update(table='ph', column='b', value=float(request.form.get('b_factor')), force_que_execution=True)
+        return redirect('/')
 
     return ph

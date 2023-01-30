@@ -45,6 +45,8 @@ class Ph:
         elif process == 'calculating':
             self.__update_algorithm()
             self.database.update(table='ph', column='process', value='work')
+        elif process == 'manual_calibration':
+            self.__manual_algorithm_update()
         elif process == 'work':
             logging.debug("Starting standard procedure for pH sensor.")
             ph = self.__get_ph_value()
@@ -127,6 +129,10 @@ class Ph:
             self.statistic_samples = []
             return result
         return None
+
+    def __manual_algorithm_update(self):
+        self.m = self.database.select(table='ph', column='m')
+        self.b = self.database.select(table='ph', column='b')
 
 
 
