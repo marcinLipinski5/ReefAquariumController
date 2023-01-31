@@ -49,7 +49,7 @@ class Ph:
             self.__manual_algorithm_update()
         elif process == 'work':
             logging.debug("Starting standard procedure for pH sensor.")
-            ph = self.__get_ph_value()
+            ph = self.__test_get_ph_value()
             statistic_mean = self.__calculate_statistic_mean(ph)
             if statistic_mean is not None:
                 self.__update_data(statistic_mean)
@@ -61,6 +61,10 @@ class Ph:
             self.last_hour = datetime.now().strftime('%H')
             self.database.update(table='ph', column='ph', value=ph)
             self.database.insert(table='ph_history', columns=['date_time', 'ph'], values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), ph])
+
+    def __test_get_ph_value(self):
+        voltage = self.__get_voltage()
+        return -10.0356 * voltage * voltage + 56.304 * voltage - 70.9854
 
     def __get_ph_value(self):
         voltage = self.__get_voltage()
