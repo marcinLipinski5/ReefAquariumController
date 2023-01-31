@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import plotly
 import plotly.express as px
+from notification import Notification
 
 from database.db import Database
 
@@ -25,7 +26,7 @@ def auto_refill_api(database: Database):
             refill_tank_water_left = int(request.form.get('refill_tank_water_left'))
             if refill_tank_water_left != database.select(table='auto_refill', column='refill_tank_water_left'):
                 database.update(table='auto_refill', column='refill_tank_water_left', value=refill_tank_water_left)
-                reset_refill_empty_tank_alert()
+                Notification(database, alert_type="auto_refill_tank_empty_alert").reset()
             return redirect('/')
         elif request.method == "GET":
             data = {'max_daily_refill_flow': database.select(table='auto_refill', column='max_daily_refill_flow'),
@@ -66,15 +67,7 @@ def auto_refill_api(database: Database):
         database.update(table='auto_refill',
                         column='refill_tank_water_left',
                         value=database.select(table='auto_refill', column='refill_tank_capacity'))
-        reset_refill_empty_tank_alert()
+        Notification(database, alert_type="auto_refill_tank_empty_alert").reset()
         return redirect('/')
-
-    def reset_refill_empty_tank_alert():
-        database.update(table='alert',
-                        column='status',
-                        value=False,
-                        boolean_needed=True,
-                        where='type="auto_refill_tank_empty_alert"',
-                        force_que_execution=True)
 
     return auto_refill
