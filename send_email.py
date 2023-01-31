@@ -10,9 +10,9 @@ class SendEmail:
     def __init__(self, subject: str, body: str):
         self.subject = subject
         self.body = body
-        self.sender = os.getenv('EMAIL_SENDER')
+        self.sender = os.getenv('AQUARIUM_EMAIL')
         self.password = os.getenv('GMAIL_API_KEY')
-        self.receiver = os.getenv('EMAIL_RECEIVER')
+        self.receiver = os.getenv('USER_EMAIL')
         if self.password is not None:
             self.send()
             logging.info(f"Email sent. Subject: {self.subject}; Body: {self.body}")

@@ -1,8 +1,7 @@
-import time
+from flask import Blueprint, jsonify, request, redirect
 
-from flask import Blueprint, Response, jsonify, request, redirect, render_template, url_for
 from database.db import Database
-from datetime import datetime
+from notification import Notification
 
 
 def alert_api(database: Database):
@@ -18,12 +17,7 @@ def alert_api(database: Database):
 
     @alert.route("/clear", methods=["GET"])
     def clear():
-        database.update(table='alert',
-                        column='status',
-                        value=False,
-                        boolean_needed=True,
-                        where=f'type="{request.args.get("type")}"',
-                        force_que_execution=True)
+        Notification(database=database, alert_type=request.args.get("type")).reset()
         return redirect('/')
 
     return alert

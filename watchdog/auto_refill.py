@@ -1,11 +1,10 @@
 import time
 import logging
-from datetime import datetime
 
 from pins.gpio_setup import GPIOSetup
 from database.db import Database
 
-from pins.IOPins import IOPins
+from notification import Notification
 
 
 class AutoRefillWatchdog:
@@ -34,12 +33,4 @@ class AutoRefillWatchdog:
         self.database.update(table='auto_refill', column='water_pump_refill_relay_state', value=False, boolean_needed=True)
 
     def __set_alert(self):
-        self.database.update(table='alert',
-                             column='status',
-                             value=True,
-                             boolean_needed=True,
-                             where='type="auto_refill_watchdog_alert"')
-        self.database.update(table='alert',
-                             column='date_time',
-                             value=datetime.now().strftime('%d-%m-%y %H:%M'),
-                             where='type="auto_refill_watchdog_alert"')
+        Notification(database=self.database, alert_type="auto_refill_watchdog_alert").send()
