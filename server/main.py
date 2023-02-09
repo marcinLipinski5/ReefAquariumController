@@ -34,6 +34,10 @@ class Server:
         return send_from_directory('static/image', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
     def prepare(self):
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+        self.app.logger.disabled = True
+        log.disabled = True
         self.app.url_map.strict_slashes = False
         CORS(self.app)
         self.app.register_blueprint(feeding_api(self.__database), url_prefix='/feeding', template_folder="templates")
