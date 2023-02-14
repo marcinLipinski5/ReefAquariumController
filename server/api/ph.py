@@ -28,7 +28,8 @@ def ph_api(database: Database):
                     'alarm_level_down': database.select(table='ph', column='alarm_level_down'),
                     'process': database.select(table='ph', column='process'),
                     'm_factor': database.select(table='ph', column='m'),
-                    'b_factor': database.select(table='ph', column='b')}
+                    'b_factor': database.select(table='ph', column='b'),
+                    'last_voltage': database.select(table='ph', column='last_voltage')}
             return jsonify(data), 200
         else:
             return Response(status=405)

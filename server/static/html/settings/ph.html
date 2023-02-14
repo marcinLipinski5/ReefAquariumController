@@ -63,6 +63,10 @@
                     </p>
                 </div>
                 <label class="general__block">
+                    <span class="settings__block general__text__settings">voltage [V]</span>
+                    <input class="settings__block general__text__settings" type="text" name="last_voltage" id="last_voltage" disabled/>
+                </label>
+                <label class="general__block">
                     <span class="settings__block general__text__settings">m</span>
                     <input class="settings__block general__text__settings" type="text" name="m_factor" id="m_factor"/>
                 </label>
@@ -84,6 +88,7 @@
             document.getElementById("alarm_level_down").value =  json.alarm_level_down;
             document.getElementById("m_factor").value =  json.m_factor;
             document.getElementById("b_factor").value =  json.b_factor;
+            document.getElementById("last_voltage").value =  json.last_voltage;
             if(json.process == "calibration"){
             console.log(json.process);
                 change_button_text();

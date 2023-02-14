@@ -113,7 +113,7 @@ class Ph:
         self.calibration_samples = []
         ph = self.database.select(table='ph', column='calibration_ph')
         self.database.update(table='ph', column=f'calibration_voltage_{ph}', value=voltage)
-        logging.debug(f'pH= {ph} voltage: {voltage}')
+        logging.info(f'Calculated calibration voltage for pH= {ph} voltage: {voltage}')
 
     def __check_alarm_condition(self):
         if (self.ph >= self.database.select(table='ph', column='alarm_level_up') or self.ph <= self.database.select(table='ph', column='alarm_level_down')) and not self.alarm:
