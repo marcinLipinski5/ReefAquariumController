@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+   <body>
+   <div class="flex-container">
+        <div class="general__block general__text__settings">
+            <table>
+                 <tr>
+                    {% for column in column_list %}
+                        {% if column == "id" %}
+                            <th>action</th>
+                        {% elif column == "date" or column == "comment" %}
+                            <th>{{ column }}</th>
+                        {% else %}
+                            <th>
+                                {{ column }}
+                                <button type="button" class="settings__block settings__block__small general__text__settings table__text__small">
+                                    <a class="material-icons" href="/water_quality/plot/?type={{column}}">query_stats</a>
+                                </button>
+                            </th>
+                        {% endif %}
+                     {% endfor %}
+                 </tr>
+                 {% for measure in measurement_list %}
+                 <tr>
+                     <th>
+                         <button type="button" class="form__btn form__btn__small">
+                             <a class="material-icons" href="/water_quality/update?id={{ measure.id }}">manage_history</a>
+                         </button>
+                     </th>
+                     {% for column in column_list %}
+                        {% if column != "id" %}
+                            <th>
+                                {{measure[column]}}
+                            </th>
+                        {% endif %}
+                     {% endfor %}
+                 </tr>
+                 {% endfor %}
+
+                <form action="/water_quality/add" method="post">
+                    <tr>
+                        {% for column in column_list %}
+                            {% if column == "id" %}
+                                <th>
+                                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />
+                                </th>
+                            {% elif column == "date" %}
+                                <th><input class="settings__block settings__block__small general__text__settings table__text__small" type="text" name={{column}} id={{column}} size="10" value="{{date}}"/></th>
+                            {% else %}
+                                <th><input class="settings__block settings__block__small general__text__settings table__text__small" type="text" name={{column}} id={{column}} size="5"/></th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </form>
+            </table>
+        </div>
+       <br>
+<!--        <div class="general__block">-->
+<!--            <form action="/water_quality/add" method="post">-->
+<!--                <label class="general__block">-->
+<!--                    <input class="settings__block general__text__settings" type="text" name="note" id="note" size="40"/>-->
+<!--                </label>-->
+
+<!--            </form>-->
+<!--        </div>-->
+   </div>
+   </body>
+</html>

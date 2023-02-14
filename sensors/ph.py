@@ -47,42 +47,43 @@ class Ph:
             self.database.update(table='ph', column='process', value='work')
         elif process == 'manual_calibration':
             self.__manual_algorithm_update()
+            self.database.update(table='ph', column='process', value='manual_calibration')
         elif process == 'work':
             logging.debug("Starting standard procedure for pH sensor.")
-            ph = self.__get_ph_value()
-            statistic_mean = self.__calculate_statistic_mean(ph)
-            if statistic_mean is not None:
-                self.__update_data(statistic_mean)
+            self.statistic_samples.append(self.__get_voltage())
+            voltage_statistic_mean = self.__calculate_voltage_statistic_mean()
+            if voltage_statistic_mean is not None:
+                self.__update_data(voltage_statistic_mean)
             self.__check_alarm_condition()
 
-    def __update_data(self, ph: float):
+    def __update_data(self, voltage_statistic_mean: float):
+        ph = self.__get_ph_value(voltage_statistic_mean)
         if (round(abs(self.ph - ph), 3) >= 0.1) or (self.last_hour != datetime.now().strftime('%H')):
             self.ph = ph
             self.last_hour = datetime.now().strftime('%H')
             self.database.update(table='ph', column='ph', value=ph)
+            self.database.update(table='ph', column='last_voltage', value=voltage_statistic_mean)
             self.database.insert(table='ph_history', columns=['date_time', 'ph'], values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), ph])
 
-    def __get_ph_value(self):
-        voltage = self.__get_voltage()
-        ph = self.m * voltage + self.b
-        return ph
+    def __get_ph_value(self, voltage):
+        return self.m * voltage + self.b
 
     def __update_algorithm(self):
-        voltage_ph_7_0 = self.database.select(table='ph', column='calibration_voltage_7_0')
-        voltage_ph_4_0 = self.database.select(table='ph', column='calibration_voltage_4_0')
-        linear_equation_values = self.__solve_equations(ph_7_0=7.0,
-                                                        ph_4_0=4.01,
-                                                        voltage_ph_7_0=voltage_ph_7_0,
-                                                        voltage_ph_4_0=voltage_ph_4_0)
+        voltage_ph_6_86 = self.database.select(table='ph', column='calibration_voltage_6_86')
+        voltage_ph_9_18 = self.database.select(table='ph', column='calibration_voltage_9_18')
+        linear_equation_values = self.__solve_equations(ph_6_86=6.86,
+                                                        ph_9_18=9.18,
+                                                        voltage_ph_6_86=voltage_ph_6_86,
+                                                        voltage_ph_9_18=voltage_ph_9_18)
         self.database.update(table='ph', column='m', value=linear_equation_values['m'])
         self.database.update(table='ph', column='b', value=linear_equation_values['b'])
         self.m = linear_equation_values['m']
         self.b = linear_equation_values['b']
 
     @staticmethod
-    def __solve_equations(ph_7_0, ph_4_0, voltage_ph_7_0, voltage_ph_4_0):
-        m = (ph_7_0 - ph_4_0) / (voltage_ph_7_0 - voltage_ph_4_0)
-        b = ph_4_0 - voltage_ph_4_0 * m
+    def __solve_equations(ph_6_86, ph_9_18, voltage_ph_6_86, voltage_ph_9_18):
+        m = (ph_6_86 - ph_9_18) / (voltage_ph_6_86 - voltage_ph_9_18)
+        b = ph_9_18 - voltage_ph_9_18 * m
         return {'m': m, 'b': b}
 
     def __get_voltage(self):
@@ -97,8 +98,8 @@ class Ph:
 
     def __check_if_calibration_ended(self):
         duration = time.time() - self.database.select(table='ph', column='calibration_time_start')
-        if duration >= 180:
-            logging.debug('pH calibration ended')
+        if duration >= 240:
+            logging.info('pH calibration ended')
             self.database.update(table='ph', column='process', value='processing')
             self.database.update(table='ph', column='calibration_time_start', value=0.0)
 
@@ -106,6 +107,8 @@ class Ph:
         self.calibration_samples.append(self.__get_voltage())
 
     def __process_calibration_samples(self):
+        self.calibration_samples.sort()
+        self.calibration_samples = self.calibration_samples[5:-5]
         voltage = statistics.mean(self.calibration_samples)
         self.calibration_samples = []
         ph = self.database.select(table='ph', column='calibration_ph')
@@ -113,15 +116,14 @@ class Ph:
         logging.debug(f'pH= {ph} voltage: {voltage}')
 
     def __check_alarm_condition(self):
-        if self.ph >= self.database.select(table='ph', column='alarm_level') and not self.alarm:
+        if (self.ph >= self.database.select(table='ph', column='alarm_level_up') or self.ph <= self.database.select(table='ph', column='alarm_level_down')) and not self.alarm:
             self.database.update(table='ph', column='alarm', value=True, boolean_needed=True)
             self.alarm = True
-        elif self.ph < self.database.select(table='ph', column='alarm_level') and self.alarm:
+        elif (self.ph < self.database.select(table='ph', column='alarm_level_up') or self.ph > self.database.select(table='ph', column='alarm_level_down')) and self.alarm:
             self.database.update(table='ph', column='alarm', value=False, boolean_needed=True)
             self.alarm = False
 
-    def __calculate_statistic_mean(self, ph: float):
-        self.statistic_samples.append(ph)
+    def __calculate_voltage_statistic_mean(self):
         if len(self.statistic_samples) >= 60: # 1 sample every 10s -> 60 samples = 10 minutes. Long calc period to avoid random peaks on plot.
             self.statistic_samples.sort()
             self.statistic_samples = self.statistic_samples[20:-20]  # Get rid of max/min values

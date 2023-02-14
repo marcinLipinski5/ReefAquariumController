@@ -20,10 +20,12 @@ def ph_api(database: Database):
     @ph.route("/settings", methods=["GET", "POST"])
     def settings():
         if request.method == "POST":
-            database.update(table='ph', column='alarm_level', value=float(request.form.get('alarm_level')))
+            database.update(table='ph', column='alarm_level_up', value=float(request.form.get('alarm_level_up')))
+            database.update(table='ph', column='alarm_level_down', value=float(request.form.get('alarm_level_down')))
             return redirect('/')
         elif request.method == "GET":
-            data = {'alarm_level': database.select(table='ph', column='alarm_level'),
+            data = {'alarm_level_up': database.select(table='ph', column='alarm_level_up'),
+                    'alarm_level_down': database.select(table='ph', column='alarm_level_down'),
                     'process': database.select(table='ph', column='process'),
                     'm_factor': database.select(table='ph', column='m'),
                     'b_factor': database.select(table='ph', column='b')}
@@ -48,7 +50,8 @@ def ph_api(database: Database):
 
     @ph.route("/calibration/manual", methods=["POST"])
     def calibration_manual():
-        database.update(table='ph', column='m', value=float(request.form.get('m_factor')), force_que_execution=True)
+        database.update(table='ph', column='process', value='manual_calibration')
+        database.update(table='ph', column='m', value=float(request.form.get('m_factor')))
         database.update(table='ph', column='b', value=float(request.form.get('b_factor')), force_que_execution=True)
         return redirect('/')
 

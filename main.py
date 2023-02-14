@@ -88,9 +88,9 @@ class ReefAquariumController:
                 self.ph.run()
                 time.sleep(10)
                 fail_counter = 0
-            except:
+            except Exception as e:
                 fail_counter += 1
-                logging.error(f"Sensor thread failed! Attempt no: {fail_counter}\n{traceback.print_exc()}")
+                logging.error(f"Sensor thread failed! Attempt no: {fail_counter}\n{traceback.print_exc()}\n{e}")
                 if fail_counter == 10:
                     logging.error("Unable to run sensor thread")
                     raise

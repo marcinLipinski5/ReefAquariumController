@@ -8,7 +8,8 @@ body {
   flex-direction: column;
   text-align: center;
   min-height: 500px;
-
+  overflow-x: visible;
+  flex-wrap: wrap
 }
 
 .settings__block {
@@ -22,6 +23,10 @@ body {
   flex: 50%;
   justify-content: center;
   align-items: center;
+}
+
+.settings__block__small {
+  padding: 2px 2px;
 }
 
 .settings__label__text {
@@ -110,8 +115,20 @@ body {
   font-weight: bold;
 }
 
+.table__text__small {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 30px;
+  font-weight: lighter;
+  padding: 20px;
+}
+
 .material-icons {
   font-size: 6vw;
+}
+
+.material-icons-small {
+  font-size: 2vw;
 }
 
 .material-symbols-outlined {
@@ -195,6 +212,10 @@ th, td {
   color: white;
   background: #8eef38;
   cursor: pointer;
+}
+
+.form__btn__small {
+  width: fit-content;
 }
 
 .alert__text {

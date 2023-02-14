@@ -30,7 +30,9 @@ class Database:
         except:
             pass
         migration_scripts_path = os.path.join(os.path.dirname(__file__), 'migrations')
-        for migration in os.listdir(migration_scripts_path):
+        migration_files = os.listdir(migration_scripts_path)
+        migration_files.sort()
+        for migration in migration_files:
             if migration.replace(".sql", "") not in done_migrations:
                 with open(os.path.join(migration_scripts_path, migration), 'r') as sql_file:
                     sql_script = sql_file.read()
@@ -137,5 +139,10 @@ class Database:
         if force_que_execution:
             self.execute_que()
 
+    def get_columns(self, table: str):
+        description = self.__connection.cursor().execute(f'PRAGMA table_info({table})')
+        return [field[1] for field in description]
+
 if __name__ == "__main__":
-    Database(":memory:")
+    memory = Database(":memory:")
+    print(memory.get_columns('water_quality'))

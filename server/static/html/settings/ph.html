@@ -11,8 +11,12 @@
             <form action="/ph/settings" method="post">
                 <p class="settings__label__block settings__label__text">pH settings</p>
                 <label class="general__block">
-                    <span class="settings__block general__text__settings">Alarm level</span>
-                    <input class="settings__block general__text__settings" type="text" name="alarm_level" id="alarm_level"/>
+                    <span class="settings__block general__text__settings">Alarm level up</span>
+                    <input class="settings__block general__text__settings" type="text" name="alarm_level_up" id="alarm_level_up"/>
+                </label>
+                <label class="general__block">
+                    <span class="settings__block general__text__settings">Alarm level down</span>
+                    <input class="settings__block general__text__settings" type="text" name="alarm_level_down" id="alarm_level_down"/>
                 </label>
                 <label class="general__block">
                     <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />                                                     
@@ -27,19 +31,19 @@
                         <br> 1. Select 4.0 or 7.0 reference solution
                         <br> 2. Put pH probe into reference solution
                         <br> 3. Click "Start" button
-                        <br> 4. Wait 4 minutes
+                        <br> 4. Wait 5 minutes
                         <br> 5. Repeat the process for next reference solution
                     </p>
                 </div>
                 <div class="general__block">
                   <p class="ph__text__settings">pH reference solution</p>
                   <p>
-                      <input type="radio" id="ph_4_0" name="ph" value="4.0" checked="checked">
-                      <label for="ph_4_0" class="general__text__settings">4.0</label>
+                      <input type="radio" id="ph_9_18" name="ph" value="9.18" checked="checked">
+                      <label for="ph_9_18" class="general__text__settings">9.18</label>
                   </p>
                   <p>
-                      <input type="radio" id="ph_7_0" name="ph" value="7.0">
-                      <label for="ph_7_0" class="general__text__settings">7.0</label><br>
+                      <input type="radio" id="ph_6_86" name="ph" value="6.86">
+                      <label for="ph_6_86" class="general__text__settings">6.86</label><br>
                   </p>
 
                 </div>
@@ -76,7 +80,8 @@
         fetch("/ph/settings")
         .then((response) => {return response.json();})
         .then((json) => { 
-            document.getElementById("alarm_level").value =  json.alarm_level;
+            document.getElementById("alarm_level_up").value =  json.alarm_level_up;
+            document.getElementById("alarm_level_down").value =  json.alarm_level_down;
             document.getElementById("m_factor").value =  json.m_factor;
             document.getElementById("b_factor").value =  json.b_factor;
             if(json.process == "calibration"){
@@ -89,7 +94,7 @@
 
         function change_button_text() {
             var start_button = document.getElementById("calibration_button");
-            start_button.value = "Calibration in progress. \nKeep probe in reference solution for 4 minutes.";
+            start_button.value = "Calibration in progress. \nKeep probe in reference solution for 5 minutes.";
             start_button.classList.remove("alarm__btn--inactive")
             start_button.classList.add("timer__btn--stop")
          }
