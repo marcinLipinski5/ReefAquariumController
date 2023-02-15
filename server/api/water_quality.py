@@ -19,8 +19,6 @@ def water_quality_api(database: Database):
             for index, value in enumerate(measure):
                 dictionary[column_list[index]] = value
             answer.append(dictionary)
-
-        print(answer)
         return render_template("html/water_quality/water_quality.html", column_list=column_list, measurement_list=answer, date=date)
 
     # @notes.route("/add", methods=["POST"])

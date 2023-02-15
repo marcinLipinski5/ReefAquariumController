@@ -240,3 +240,7 @@ th, td {
   margin: 15px;
 }
 
+.rotated {
+  transform: rotate(90deg);
+}
+

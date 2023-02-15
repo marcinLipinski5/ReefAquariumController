@@ -4,9 +4,12 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
         <link rel="stylesheet" href="../css/main.css">
+          <style>
+            #__link_text {color: blue; text-decoration: underline;}
+        </style>
     </head>
    <body>
-   <div class="flex-container">
+   <div class="flex-container rotated">
         <div class="general__block general__text__settings">
             <table>
                  <tr>
@@ -17,10 +20,7 @@
                             <th>{{ column }}</th>
                         {% else %}
                             <th>
-                                {{ column }}
-                                <button type="button" class="settings__block settings__block__small general__text__settings table__text__small">
-                                    <a class="material-icons" href="/water_quality/plot/?type={{column}}">query_stats</a>
-                                </button>
+                                <a href="/water_quality/plot/?type={{column}}" id="__link_text">{{ column }}</a>
                             </th>
                         {% endif %}
                      {% endfor %}

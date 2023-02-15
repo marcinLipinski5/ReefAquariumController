@@ -18,8 +18,8 @@ class General {
 	   </button>
     </div>
         <div class="general__button__block">
-      <button type="button" class="general__btn settings__btn settings__btn__inactive">
-        <a class="material-icons">hourglass_disabled</a>
+      <button type="button" class="general__btn settings__btn">
+        <a class="material-icons" href='water_quality/'>science</a>
 	   </button>
     </div>
         <div class="general__button__block">

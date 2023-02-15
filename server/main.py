@@ -12,6 +12,7 @@ from server.api.temperature import temperature_api
 from server.api.ph import ph_api
 from server.api.notes import notes_api
 from server.api.alert import alert_api
+from server.api.water_quality import water_quality_api
 
 
 class Server:
@@ -47,6 +48,7 @@ class Server:
         self.app.register_blueprint(ph_api(self.__database), url_prefix="/ph")
         self.app.register_blueprint(notes_api(self.__database), url_prefix="/notes")
         self.app.register_blueprint(alert_api(self.__database), url_prefix="/alert")
+        self.app.register_blueprint(water_quality_api(self.__database), url_prefix='/water_quality')
         logging.info('Server started!')
 
     def run(self):
