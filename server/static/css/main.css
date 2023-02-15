@@ -239,8 +239,3 @@ th, td {
   width: 100%;
   margin: 15px;
 }
-
-.rotated {
-  transform: rotate(90deg);
-}
-
