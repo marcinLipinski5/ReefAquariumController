@@ -14,7 +14,7 @@ class Ph {
   }
 
   updateInterfacePh() {
-    this.phElement.ph.textContent = this.ph.toFixed(1).toString().padStart(2, "0")
+    this.phElement.ph.textContent = this.ph.toFixed(2).toString().padStart(2, "0")
   }
 
   updateInterfaceAlarm() {

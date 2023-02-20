@@ -24,7 +24,7 @@ class Controller:
         elif self.__check_limit_switch_state():
             return
         elif self.__should_pump_be_active():
-            logging.info("Running auto refill pump")
+            logging.debug("Running auto refill pump")
             try:
                 self.database.update(table='auto_refill', column='refill_time_start', value=time.time())
                 self.gpio.set(self.gpio.water_pump_refill_relay.value, 1)
@@ -36,7 +36,7 @@ class Controller:
                 self.gpio.set(self.gpio.water_pump_refill_relay.value, 0)
                 self.database.update(table='auto_refill', column='water_pump_refill_relay_state', value=False, boolean_needed=True)
                 self.database.update(table='auto_refill', column='refill_time_start', value=0.0)
-                logging.info("Auto refill pump successfuly stopped")
+                logging.debug("Auto refill pump successfuly stopped")
         else:
             logging.debug('None of auto refill condition was fulfilled')
 
@@ -54,7 +54,7 @@ class Controller:
         state = not self.gpio.get(self.gpio.limit_switch.value)
         self.database.update(table='auto_refill', column='limit_switch_state', value=state, boolean_needed=True)
         if state:
-            logging.warning("Limit switch is open. Can not execute auto-refill process.")
+            logging.debug("Limit switch is open. Can not execute auto-refill process.")
         return state
 
     def __check_alarm_conditions(self) -> None:
