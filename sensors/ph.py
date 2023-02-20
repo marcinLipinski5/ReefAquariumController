@@ -47,7 +47,7 @@ class Ph:
             self.database.update(table='ph', column='process', value='work')
         elif process == 'manual_calibration':
             self.__manual_algorithm_update()
-            self.database.update(table='ph', column='process', value='manual_calibration')
+            self.database.update(table='ph', column='process', value='work')
         elif process == 'work':
             logging.debug("Starting standard procedure for pH sensor.")
             self.statistic_samples.append(self.__get_voltage())
@@ -135,6 +135,7 @@ class Ph:
     def __manual_algorithm_update(self):
         self.m = self.database.select(table='ph', column='m')
         self.b = self.database.select(table='ph', column='b')
+        logging.info(f'Manual calibration done. New values: m={self.m}; b={self.b}')
 
 
 
