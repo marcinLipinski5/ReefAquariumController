@@ -22,6 +22,8 @@ from send_email import SendEmail
 # noinspection PyArgumentList
 class ReefAquariumController:
 
+    ROOT_PATH = os.path.join(os.path.dirname(__file__))
+
     def __init__(self):
         load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
         logging.basicConfig(
@@ -42,7 +44,7 @@ class ReefAquariumController:
         self.feeding = FeedingController(self.database, gpio)
         self.ph = PhController(self.database)
         self.watchdog = Watchdog(self.database, gpio)
-        self.server = Server(self.database)
+        self.server = Server(self.database, self.ROOT_PATH)
 
         self.database_thread = threading.Thread(target=self.update_database, args=(), daemon=True, name='database_thread')
         self.sensors_thread = threading.Thread(target=self.run_sensors, args=(), daemon=True, name='sensors_thread')

@@ -13,12 +13,14 @@ from server.api.ph import ph_api
 from server.api.notes import notes_api
 from server.api.alert import alert_api
 from server.api.water_quality import water_quality_api
+from server.api.log import log_api
 
 
 class Server:
 
-    def __init__(self, database: Database):
+    def __init__(self, database: Database, root_path: str):
         self.__database = database
+        self.__root_path = root_path
 
     app = Flask(__name__, static_url_path='',
                 static_folder='static',
@@ -49,6 +51,7 @@ class Server:
         self.app.register_blueprint(notes_api(self.__database), url_prefix="/notes")
         self.app.register_blueprint(alert_api(self.__database), url_prefix="/alert")
         self.app.register_blueprint(water_quality_api(self.__database), url_prefix='/water_quality')
+        self.app.register_blueprint(log_api(self.__root_path), url_prefix='/log')
         logging.info('Server started!')
 
     def run(self):
@@ -62,4 +65,4 @@ class Server:
 
 
 if __name__ == "__main__":
-    Server(Database()).run()
+    Server(Database(), "/not_defined_root_path/").run()

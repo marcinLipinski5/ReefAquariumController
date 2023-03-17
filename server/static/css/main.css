@@ -239,3 +239,10 @@ th, td {
   width: 100%;
   margin: 15px;
 }
+
+.log_element {
+padding: 0px;
+background-color: #e9e5e5;
+text-align: left;
+font-size: 40%
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+   <body>
+   <div class="flex-container">
+        <div class="general__block general__text__settings">
+            <table>
+                 {% for log in log_list %}
+                 <tr>
+                    <th class="log_element">{{ log }}</th>
+                 </tr>
+                 {% endfor %}
+             </table>
+        </div>
+       <br>
+
+   </div>
+   </body>
+</html>
