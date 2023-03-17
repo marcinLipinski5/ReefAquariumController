@@ -28,7 +28,7 @@ class ReefAquariumController:
         load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
         logging.basicConfig(
             level=logging.INFO,
-            format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s",
+            format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s |",
             datefmt='%Y-%m-%d %H:%M:%S',
             handlers=[
                 logging.FileHandler(os.path.join(os.path.dirname(__file__), "aquarium_log.log")),
