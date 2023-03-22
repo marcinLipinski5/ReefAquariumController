@@ -86,7 +86,7 @@ class Controller:
     def __set_alarm(self, alarm_state: bool):
         self.database.update(table='auto_refill', column='alarm', value=alarm_state, boolean_needed=True)
         self.alarm = alarm_state
-        if self.alarm:
+        if self.alarm and not self.alarm:
             logging.warning(f"Alarm level for auto refill reached. "
                             f"UP_LEVEL_SENSOR_STATUS: {self.__check_level_sensor_state(self.gpio.water_level_sensor_up_value.value, self.gpio.water_level_sensor_up_value.name)}, "
                             f"DAILY_REFILL_FLOW: {self.database.select(table='auto_refill', column='daily_refill_flow')}")
