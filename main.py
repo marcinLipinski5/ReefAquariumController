@@ -132,7 +132,7 @@ class ReefAquariumController:
                 logging.info(f"Ngrok url successfully collected. New url: {url}")
                 SendEmail(subject='Ngrok new url', body=f'Ngrok new url: {url}')
                 break
-            except AssertionError:
+            except:
                 logging.warning(f'Unable to collect new ngrok url. The process will be repeated: {counter} times.')
                 time.sleep(2)
                 counter -= 1
