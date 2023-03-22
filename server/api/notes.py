@@ -13,7 +13,10 @@ def notes_api(database: Database):
         note_list = database.select(table='notes', single=False, append=' ORDER BY id DESC')
         answer = []
         for note in note_list:
-            answer.append({'id': note[0], 'date': note[1], 'content': note[2]})
+            date_time = note[1].split(" ")
+            date = date_time[0]
+            time = date_time[1]
+            answer.append({'id': note[0], 'date': date, 'time': time, 'content': note[2]})
         return render_template("html/notes/notes.html", note_list=answer)
 
     @notes.route("/add", methods=["POST"])

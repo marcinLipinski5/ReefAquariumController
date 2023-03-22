@@ -246,3 +246,7 @@ background-color: #e9e5e5;
 text-align: left;
 font-size: 70%
 }
+
+.column__date {
+white-space: nowrap;
+}
