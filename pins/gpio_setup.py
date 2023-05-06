@@ -14,11 +14,17 @@ class GPIOSetup:
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
 
-        # # fan section
-        self.pwm = IOPins.FAN_PWM
-        GPIO.setup(self.pwm.value, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pwm.value, 50)
-        self.pwm.start(100)
+        # fan section
+        self.pwm_fan = IOPins.FAN_PWM
+        GPIO.setup(self.pwm_fan.value, GPIO.OUT)
+        self.pwm_fan = GPIO.PWM(self.pwm_fan.value, 50)
+        self.pwm_fan.start(100)
+
+        # light section
+        self.pwm_light = IOPins.LIGHT_PWM
+        GPIO.setup(self.pwm_light.value, GPIO.OUT)
+        self.pwm_light = GPIO.PWM(self.pwm_light.value, 50)
+        self.pwm_light.start(100)
 
         # auto refill section
         self.water_level_sensor_down_value_main = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_MAIN
@@ -44,9 +50,10 @@ class GPIOSetup:
         self.heater_relay = IOPins.HEATER_RELAY
         GPIO.setup(self.heater_relay.value, GPIO.OUT)
 
-    # # fan
-    def change_pwm(self, duty_cycle):
-        self.pwm.ChangeDutyCycle(duty_cycle)
+    # pwm
+    @staticmethod
+    def change_pwm(pwm_pin, duty_cycle):
+        pwm_pin.ChangeDutyCycle(duty_cycle)
 
     # pulse counter
     @staticmethod

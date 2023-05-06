@@ -12,6 +12,7 @@ from sensors.temperature import Temperature as TemperatureController
 from sensors.fan import Fan as FanController
 from sensors.feeding import Feeding as FeedingController
 from sensors.ph import Ph as PhController
+from sensors.light import Light as LightController
 from watchdog.main import Main as Watchdog
 from server.main import Server
 from database.db import Database
@@ -43,6 +44,7 @@ class ReefAquariumController:
         self.fan = FanController(self.database, gpio)
         self.feeding = FeedingController(self.database, gpio)
         self.ph = PhController(self.database)
+        self.light = LightController(self.database, gpio)
         self.watchdog = Watchdog(self.database, gpio)
         self.server = Server(self.database, self.ROOT_PATH)
 
@@ -88,6 +90,7 @@ class ReefAquariumController:
                 self.fan.run()
                 self.feeding.run()
                 self.ph.run()
+                self.light.run()
                 time.sleep(10)
                 fail_counter = 0
             except Exception as e:

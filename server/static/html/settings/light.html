@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/main.css">
+    </head>
+   <body>
+    <div class="flex-container">
+        <div class="general__block">
+            <form action="/light/settings" method="post">
+                <p class="settings__label__block settings__label__text">Light settings</p>
+                <label class="general__block"  id="flex__block__column">
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Time start</span>
+                        <input class="settings__block general__text__settings" type="text" name="time_start" id="time_start"/><br>
+                    </div>
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Time stop</span>
+                        <input class="settings__block general__text__settings" type="text" name="time_stop" id="time_stop"/><br>
+                    </div>
+                    <div class="general__block">
+                        <span class="settings__block general__text__settings">Power [%]</span>
+                        <input class="settings__block general__text__settings" type="text" name="power" id="power"/><br>
+                    </div>
+                </label>
+                <label class="general__block">
+                    <input type="submit" class="settings__block general__text__settings alarm__btn--inactive" value="Save" />                                                     
+                </label>
+            </form>
+        </div>
+    </div>
+    <script>
+        fetch("/light/settings")
+        .then((response) => {return response.json();})
+        .then((json) => { 
+            document.getElementById("time_start").value =  json.time_start;
+            document.getElementById("time_stop").value =  json.time_stop;
+            document.getElementById("power").value =  json.power;
+         });
+</script>
+<style>
+    #flex__block__column {
+      flex-direction: column;
+    }
+  </style>
+    </body>
+</html>
+

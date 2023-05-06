@@ -14,6 +14,7 @@ from server.api.notes import notes_api
 from server.api.alert import alert_api
 from server.api.water_quality import water_quality_api
 from server.api.log import log_api
+from server.api.light import light_api
 
 
 class Server:
@@ -37,10 +38,10 @@ class Server:
         return send_from_directory('static/image', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
     def prepare(self):
-        log = logging.getLogger('werkzeug')
-        log.setLevel(logging.ERROR)
-        self.app.logger.disabled = True
-        log.disabled = True
+        # log = logging.getLogger('werkzeug')
+        # log.setLevel(logging.ERROR)
+        # self.app.logger.disabled = True
+        # log.disabled = True
         self.app.url_map.strict_slashes = False
         CORS(self.app)
         self.app.register_blueprint(feeding_api(self.__database), url_prefix='/feeding', template_folder="templates")
@@ -52,6 +53,7 @@ class Server:
         self.app.register_blueprint(alert_api(self.__database), url_prefix="/alert")
         self.app.register_blueprint(water_quality_api(self.__database), url_prefix='/water_quality')
         self.app.register_blueprint(log_api(self.__root_path), url_prefix='/log')
+        self.app.register_blueprint(light_api(self.__database), url_prefix='/light')
         logging.info('Server started!')
 
     def run(self):

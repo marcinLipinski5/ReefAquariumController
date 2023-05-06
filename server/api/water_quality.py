@@ -1,8 +1,8 @@
-import time
-
-from flask import Blueprint, Response, jsonify, request, redirect, render_template, url_for
-from database.db import Database
 from datetime import datetime
+
+from flask import Blueprint, render_template
+
+from database.db import Database
 
 
 def water_quality_api(database: Database):

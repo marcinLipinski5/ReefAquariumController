@@ -39,4 +39,4 @@ class Fan:
 
     def __set_duty_cycle(self, duty_cycle: int):
         logging.info(f"Setting duty cycle: {duty_cycle} for PWM fans controller.")
-        self.gpio_setup.change_pwm(duty_cycle)
+        self.gpio_setup.change_pwm(self.gpio_setup.pwm_fan, duty_cycle)
