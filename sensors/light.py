@@ -12,8 +12,8 @@ class Light:
         self.database = database
         self.gpio_setup = gpio_setup
         self.__set_duty_cycle(self.database.select(table='light', column='power'))
-        self.time_start = self.str_to_time(self.database.select(table='light', column='time_start'))
-        self.time_stop = self.str_to_time(self.database.select(table='light', column='time_stop'))
+        self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
+        self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
         self.light_active = False
 
     @staticmethod
@@ -24,8 +24,8 @@ class Light:
         now = self.str_to_time(datetime.now().strftime("%H:%M"))
         if self.database.select(table='light', column='update_needed', boolean_needed=True):
             self.__set_duty_cycle(self.database.select(table='light', column='power'))
-            self.time_start = self.str_to_time(self.database.select(table='light', column='time_start'))
-            self.time_stop = self.str_to_time(self.database.select(table='light', column='time_stop'))
+            self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
+            self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
             self.database.update(table='light', column='update_needed', value=False, boolean_needed=True)
         if self.time_start >= now <= self.time_stop and not self.light_active:
             self.light_active = True
