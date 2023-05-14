@@ -37,10 +37,10 @@ class Temperature:
     def __check_alarm_conditions(self, temperature: float):
         # casting to int to avoid relay flicking on temp on the end of the range
         max_temperature = self.database.select(table='temperature', column='alarm_level')
-        if int(temperature) >= max_temperature and not self.alarm:
+        if temperature >= max_temperature and not self.alarm:
             logging.info(f"Setting alarm level for temperature sensor. Current temperature: {temperature}")
             self.__set_alarm(True)
-        elif (int(temperature) + 0.3 < max_temperature and self.alarm) or self.last_read == 0.00:
+        elif ((temperature + 0.3) < max_temperature and self.alarm) or self.last_read == 0.00:
             logging.info(f"Setting normal level for temperature sensor. Current temperature: {temperature}")
             self.__set_alarm(False)
 
