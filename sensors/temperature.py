@@ -40,7 +40,7 @@ class Temperature:
         if int(temperature) >= max_temperature and not self.alarm:
             logging.info(f"Setting alarm level for temperature sensor. Current temperature: {temperature}")
             self.__set_alarm(True)
-        elif (int(temperature) < max_temperature and self.alarm) or self.last_read == 0.00:
+        elif (int(temperature) < max_temperature - 0.3 and self.alarm) or self.last_read == 0.00:
             logging.info(f"Setting normal level for temperature sensor. Current temperature: {temperature}")
             self.__set_alarm(False)
 
