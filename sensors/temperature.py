@@ -35,7 +35,6 @@ class Temperature:
                                  values=[datetime.now().strftime('%Y-%m-%d %H:%M:%S'), temperature])
 
     def __check_alarm_conditions(self, temperature: float):
-        # casting to int to avoid relay flicking on temp on the end of the range
         max_temperature = self.database.select(table='temperature', column='alarm_level')
         if temperature >= max_temperature and not self.alarm:
             logging.info(f"Setting alarm level for temperature sensor. Current temperature: {temperature}")

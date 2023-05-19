@@ -27,7 +27,7 @@ class Light:
             self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
             self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
             self.database.update(table='light', column='update_needed', value=False, boolean_needed=True)
-        if self.time_start >= now <= self.time_stop and not self.light_active:
+        if self.time_start < now <= self.time_stop and not self.light_active:
             self.light_active = True
             self.__set_duty_cycle(self.database.select(table='light', column='power'))
         elif self.time_start < now > self.time_stop and self.light_active:
