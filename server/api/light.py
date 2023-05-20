@@ -14,8 +14,8 @@ def light_api(database: Database):
             database.update(table='light', column='update_needed', value=True, boolean_needed=True)
             return redirect('/')
         elif request.method == "GET":
-            data = {'time_start': database.select(table='light', column='start_time'),
-                    'time_stop': database.select(table='light', column='stop_time'),
+            data = {'start_time': database.select(table='light', column='start_time'),
+                    'stop_time': database.select(table='light', column='stop_time'),
                     'power': database.select(table='light', column='power')}
             return jsonify(data), 200
         else:

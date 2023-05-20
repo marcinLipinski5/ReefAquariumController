@@ -13,11 +13,11 @@
                 <label class="general__block"  id="flex__block__column">
                     <div class="general__block">
                         <span class="settings__block general__text__settings">Time start</span>
-                        <input class="settings__block general__text__settings" type="text" name="time_start" id="time_start"/><br>
+                        <input class="settings__block general__text__settings" type="time" name="start_time" id="start_time"/><br>
                     </div>
                     <div class="general__block">
                         <span class="settings__block general__text__settings">Time stop</span>
-                        <input class="settings__block general__text__settings" type="text" name="time_stop" id="time_stop"/><br>
+                        <input class="settings__block general__text__settings" type="time" name="stop_time" id="stop_time"/><br>
                     </div>
                     <div class="general__block">
                         <span class="settings__block general__text__settings">Power [%]</span>
@@ -34,8 +34,8 @@
         fetch("/light/settings")
         .then((response) => {return response.json();})
         .then((json) => { 
-            document.getElementById("time_start").value =  json.time_start;
-            document.getElementById("time_stop").value =  json.time_stop;
+            document.getElementById("start_time").value =  json.start_time;
+            document.getElementById("stop_time").value =  json.stop_time;
             document.getElementById("power").value =  json.power;
          });
 </script>

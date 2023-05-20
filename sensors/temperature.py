@@ -1,11 +1,13 @@
+import logging
 #  import mock for local (not RPi) development
 try:
     import w1thermsensor
 except:
     import tests.w1thermsensor_mock as w1thermsensor
+    logging.error("Unable to import temperature sensor library")
 from database.db import Database
 from datetime import datetime
-import logging
+
 from pins.gpio_setup import GPIOSetup
 
 
@@ -13,7 +15,11 @@ class Temperature:
 
     def __init__(self, database: Database, gpio: GPIOSetup):
         self.database = database
-        self.sensor = w1thermsensor.W1ThermSensor()
+        try:
+            self.sensor = w1thermsensor.W1ThermSensor()
+        except:
+            logging.error("Unable to initialize temperature sensors. Sensor should be properly connected to the Raspberry.")
+            raise
         self.gpio = gpio
         self.last_read = 0.00
         self.last_hour = datetime.now().strftime('%H')
