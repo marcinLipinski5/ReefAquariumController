@@ -24,10 +24,11 @@ class Light:
     def run(self):
         now = self.str_to_time(datetime.now().strftime("%H:%M"))
         if self.database.select(table='light', column='update_needed', boolean_needed=True):
-            self.__set_duty_cycle(self.database.select(table='light', column='power'))
             self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
             self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
             self.database.update(table='light', column='update_needed', value=False, boolean_needed=True)
+            self.light_active = False
+            self.feeding_light = False
         if self.__should_feeding_lights_be_enabled():
             self.feeding_light = True
             self.__set_duty_cycle(1)
@@ -41,7 +42,7 @@ class Light:
             self.__set_duty_cycle(0)
 
     def __should_all_lamps_be_disabled(self, now) -> bool:
-        return self.time_start < now > self.time_stop and (self.light_active or self.feeding_light)
+        return (self.time_start < now > self.time_stop) and (self.light_active or self.feeding_light)
 
     def __should_feeding_lights_be_enabled(self) -> bool:
         return self.database.select(table='light', column='enable_feeding_light', boolean_needed=True) \
