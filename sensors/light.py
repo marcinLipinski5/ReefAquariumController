@@ -1,3 +1,4 @@
+
 import logging
 
 from database.db import Database
@@ -25,9 +26,8 @@ class Light:
         if self.database.select(table='light', column='update_needed', boolean_needed=True):
             self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
             self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
+            self.__set_duty_cycle(self.database.select(table='light', column='power'))
             self.database.update(table='light', column='update_needed', value=False, boolean_needed=True)
-            self.light_active = False
-            self.feeding_light = False
         if self.__should_feeding_lights_be_enabled():
             self.feeding_light = True
             self.__set_duty_cycle(1)

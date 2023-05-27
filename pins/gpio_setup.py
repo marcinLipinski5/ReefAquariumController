@@ -24,7 +24,7 @@ class GPIOSetup:
         self.pwm_light = IOPins.LIGHT_PWM
         GPIO.setup(self.pwm_light.value, GPIO.OUT)
         self.pwm_light = GPIO.PWM(self.pwm_light.value, 50)
-        self.pwm_light.start(100)
+        self.pwm_light.start(0)
 
         # auto refill section
         self.water_level_sensor_down_value_main = IOPins.WATER_LEVEL_SENSOR_DOWN_VALUE_MAIN
