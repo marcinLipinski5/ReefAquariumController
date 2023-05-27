@@ -35,7 +35,7 @@ class Light:
             self.feeding_light = False
             self.light_active = True
             self.__set_duty_cycle(self.database.select(table='light', column='power'))
-        elif self.__should_all_lamps_be_disabled():
+        elif self.__should_all_lamps_be_disabled(now):
             self.feeding_light = False
             self.light_active = False
             self.__set_duty_cycle(0)
