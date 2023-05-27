@@ -11,7 +11,6 @@ class Light:
         logging.info("Starting main method for light control.")
         self.database = database
         self.gpio_setup = gpio_setup
-        self.__set_duty_cycle(self.database.select(table='light', column='power'))
         self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
         self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
         self.light_active = False
