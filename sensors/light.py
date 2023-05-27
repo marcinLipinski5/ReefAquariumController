@@ -15,6 +15,7 @@ class Light:
         self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
         self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
         self.light_active = False
+        self.feeding_light = False
 
     @staticmethod
     def str_to_time(string_time: str):
@@ -27,12 +28,23 @@ class Light:
             self.time_start = self.str_to_time(self.database.select(table='light', column='start_time'))
             self.time_stop = self.str_to_time(self.database.select(table='light', column='stop_time'))
             self.database.update(table='light', column='update_needed', value=False, boolean_needed=True)
-        if self.time_start < now <= self.time_stop and not self.light_active:
+        if self.__should_feeding_lights_be_enabled():
+            self.feeding_light = True
+            self.__set_duty_cycle(1)
+        elif self.time_start < now <= self.time_stop and not self.light_active:
+            self.feeding_light = False
             self.light_active = True
             self.__set_duty_cycle(self.database.select(table='light', column='power'))
         elif self.time_start < now > self.time_stop and self.light_active:
+            self.feeding_light = False
             self.light_active = False
             self.__set_duty_cycle(0)
+
+    def __should_feeding_lights_be_enabled(self) -> bool:
+        return self.database.select(table='light', column='enable_feeding_light', boolean_needed=True) \
+               and self.database.select(table="feeding", column="is_feeding_time", boolean_needed=True) \
+               and not self.feeding_light \
+               and not self.light_active
 
     def __set_duty_cycle(self, duty_cycle: int):
         logging.info(f"Setting duty cycle: {duty_cycle} for PWM light controller.")

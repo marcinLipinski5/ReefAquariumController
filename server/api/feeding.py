@@ -42,9 +42,11 @@ def feeding_api(database: Database):
     def settings():
         if request.method == "POST":
             database.update(table='feeding', column='feeding_duration', value=int(request.form.get('feeding_time')))
+            database.update(table='light', column="enable_feeding_light", value=bool(request.form.get('feeding_light')), boolean_needed=True, force_que_execution=True)
             return redirect('/')
         elif request.method == "GET":
-            data = {'feeding_duration': database.select(table='feeding', column='feeding_duration')}
+            data = {'feeding_duration': database.select(table='feeding', column='feeding_duration'),
+                    'enable_feeding_light': database.select(table='light', column='enable_feeding_light', boolean_needed=True)}
             return jsonify(data), 200
         else:
             return Response(status=405)
