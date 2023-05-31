@@ -41,7 +41,9 @@ class Light:
             self.__set_duty_cycle(0)
 
     def __should_all_lamps_be_disabled(self, now) -> bool:
-        return (self.time_start < now > self.time_stop) and (self.light_active or self.feeding_light)
+        disable_day_light = (self.time_start < now > self.time_stop) and self.light_active
+        disable_feeding_light = self.feeding_light and not self.database.select(table="feeding", column="is_feeding_time", boolean_needed=True)
+        return disable_day_light or disable_feeding_light
 
     def __should_feeding_lights_be_enabled(self) -> bool:
         return self.database.select(table='light', column='enable_feeding_light', boolean_needed=True) \
