@@ -143,6 +143,16 @@ class Database:
         description = self.__connection.cursor().execute(f'PRAGMA table_info({table})')
         return [field[1] for field in description]
 
+    # e.g. fields = [{"name": "surname", "type": "TEXT", "constraint": "NOT NULL"}]
+    # def create_table(self, fields: list[dict], name: str, force_que_execution=False):
+    #     columns = ''
+    #     for column in fields:
+    #         columns += f'{column["name"]} {column["type"]} {column["constraint"]}, \n'
+    #     statement = f'CREATE TABLE {name} ({columns})'
+    #     self.__add_to_que(statement)
+    #     if force_que_execution:
+    #         self.execute_que()
+
 if __name__ == "__main__":
     memory = Database(":memory:")
     print(memory.get_columns('water_quality'))
