@@ -1,4 +1,5 @@
 import logging
+from logging import handlers
 import threading
 import time
 import traceback
@@ -32,7 +33,7 @@ class ReefAquariumController:
             format="%(asctime)s  [%(threadName)s] [%(levelname)s] %(message)s |",
             datefmt='%Y-%m-%d %H:%M:%S',
             handlers=[
-                logging.FileHandler(os.path.join(os.path.dirname(__file__), "aquarium_log.log")),
+                logging.handlers.RotatingFileHandler(os.path.join(os.path.dirname(__file__), "aquarium_log.log"), maxBytes=1024 * 1024, backupCount=5),
                 logging.StreamHandler()
             ]
         )
